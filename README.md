@@ -133,6 +133,16 @@ Full units, molar masses and provenance are in **`data/xxl_lysimeter_metadata.js
 - **Surface area 0.406 m²/pot** (0.70 × 0.58 m); all area-normalised results use this.
 - **CO₂ factor: 1 mol CO₂ per mol HCO₃⁻** — we report measured bicarbonate export as
   CO₂-equivalent (downstream/ocean losses excluded).
+- **Gross export — not input-corrected.** Export = leachate concentration × drainage volume.
+  It is *not* netted against the alkalinity carried in by the irrigation water. In the first
+  summer (2022) the pots were irrigated mainly with carbonate-bearing municipal tap water
+  (logbook "Water Calculator"; on dry intervals only ~4–6 % of input was rain), which brings
+  its own HCO₃⁻/Ca/Mg. The absolute CDR figures are therefore an **upper bound**; a proper
+  net-weathering number needs the supply-water composition (not measured here). This is
+  common-mode across all pots, so it does **not** affect the treatment-vs-control comparison.
+- **Early phase (first ~90 days) is unrepresentative** — an initial flush (Birch effect:
+  rewetting of the freshly built, disturbed soil after the first big drainage, Aug 2022), not
+  weathering.
 - **Below detection limit:** values reported as `<x` are set to 0 (flagged `below_lod` in
   the long table).
 - **Sensor dryness filter:** buried EC/pH readings below **10 % VWC** are dropped (the
