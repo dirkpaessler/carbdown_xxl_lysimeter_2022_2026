@@ -162,12 +162,17 @@ out-of-sample check — see `data/xxl_lysimeter_volume_strategy_plausibility.csv
 
 ## 7. Key findings (with figures)
 
-- **Dose–response converges.** After a strong early pulse, no treatment differs
-  significantly from control in alkalinity export over the whole period (per-window Welch,
-  n = 4; whole-period mixed model). FINE trends highest (+6 % conc, +9 % export) but is
-  not significant — and FINE is mineralogically a *different rock* (see §8).
+- **Dose–response converges.** The early alkalinity peak is the Birch effect (rewetting
+  flush of the freshly built soil, Aug 2022), not weathering; over the whole period no
+  treatment differs significantly from control (per-window Welch, n = 4; whole-period mixed
+  model). FINE trends highest (+6 % conc, +9 % export) but is not significant — and FINE is
+  mineralogically a *different rock* (see §8).
   → `figures/slide1_TA_export_headline.png`, `alt_FUERTH2022_alkalinity_cumflux.png`,
   `alt_FUERTH2022_significance_vs_control.png`, `slide2_mixedmodel_forest.png`.
+- **The irrigation-water blank.** In 2022 the pots were watered with ~111 L/pot of hard tap
+  water (≈ 5.1 mmol/L HCO₃⁻) ≈ 0.6 tCO₂e/ha ≈ 40 % of the gross cumulative — common to every
+  pot, so it does not change the dose comparison but lowers the absolute CDR (see §5).
+  → `figures/water_irrigation_share_2022.png`, `figures/TA_cumulative_gross_vs_net_tapwater.png`.
 - **A buried EC sensor tracks leachate chemistry.** The 60 cm soil-EC probe correlates
   with leachate EC/Ca/Mg at r ≈ 0.71 pooled (0.60–0.77 per treatment), rising to
   **r ≈ 0.77** after controlling for soil moisture. **The 30 cm sensor barely works**

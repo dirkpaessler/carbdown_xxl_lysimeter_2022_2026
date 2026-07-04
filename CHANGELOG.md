@@ -27,7 +27,9 @@ Public releases of the Fürth-2022 dataset. Newest first.
   ≈ 5.1 mmol/L HCO₃⁻) ≈ 0.6 tCO₂e/ha ≈ 40 % of gross, so absolute CDR is an upper bound
   (irrigation-corrected ≈ 0.9–1.1 tCO₂e/ha). Common-mode across pots → treatment-vs-control
   comparisons unaffected. First ~90 days = initial flush / Birch effect. See README §5.
-- Figures branded with the Carbon Drawdown Initiative logo.
+- Figures branded with the Carbon Drawdown Initiative logo. Includes two irrigation-blank
+  figures (`water_irrigation_share_2022.png`, `TA_cumulative_gross_vs_net_tapwater.png`) and
+  the script that makes them (`code/xxl_lysimeter_water_share.py`).
 - Released under **CC-BY-4.0**.
 
 Supersedes the earlier *"XXL Lysimeter Experiment (started 2022) — Environmental data
