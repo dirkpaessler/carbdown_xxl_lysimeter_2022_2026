@@ -135,11 +135,12 @@ Full units, molar masses and provenance are in **`data/xxl_lysimeter_metadata.js
   CO₂-equivalent (downstream/ocean losses excluded).
 - **Gross export — not input-corrected.** Export = leachate concentration × drainage volume.
   It is *not* netted against the alkalinity carried in by the irrigation water. In the first
-  summer (2022) the pots were irrigated mainly with carbonate-bearing municipal tap water
-  (logbook "Water Calculator"; on dry intervals only ~4–6 % of input was rain), which brings
-  its own HCO₃⁻/Ca/Mg. The absolute CDR figures are therefore an **upper bound**; a proper
-  net-weathering number needs the supply-water composition (not measured here). This is
-  common-mode across all pots, so it does **not** affect the treatment-vs-control comparison.
+  summer (2022) each pot received ~111 L of hard municipal tap water (Infra Fürth, 16.7 °dGH,
+  ≈ 5.1 mmol/L bicarbonate by ion balance) vs ~160 L rain. That input ≈ **0.6 tCO₂e/ha**,
+  about **40 %** of the ~1.6 tCO₂e/ha gross cumulative — so the absolute CDR figures are an
+  **upper bound** (irrigation-corrected ≈ 0.9–1.1 tCO₂e/ha, less again after downstream
+  losses). This is common-mode across all pots, so it does **not** affect the
+  treatment-vs-control comparison (irrigation-corrected treatment−control ≈ −0.06…+0.11).
 - **Early phase (first ~90 days) is unrepresentative** — an initial flush (Birch effect:
   rewetting of the freshly built, disturbed soil after the first big drainage, Aug 2022), not
   weathering.

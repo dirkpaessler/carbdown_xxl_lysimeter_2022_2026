@@ -106,6 +106,6 @@
     "parquet": null
   },
   "scope_note": "Public release: soil 'Fürth 2022' experiment only (started 2022-05-15). A 2025 follow-on experiment (most pots repurposed with a new soil) is separate and not yet released.",
-  "export_is_gross_not_input_corrected": "TA export = leachate concentration x drainage volume; NOT netted against alkalinity carried in by irrigation water. In 2022 the pots were irrigated mainly with carbonate-bearing municipal tap water, so absolute CDR is an upper bound (net weathering = gross - irrigation input - downstream losses). Common-mode across pots, so treatment-vs-control comparisons are unaffected. First ~90 days = initial flush / Birch effect, not weathering.",
+  "export_is_gross_not_input_corrected": "TA export = leachate concentration x drainage volume; NOT netted against alkalinity carried in by irrigation water. In 2022 each pot received ~111 L hard municipal tap water (Infra Fuerth, 16.7 dGH, ~5.1 mmol/L HCO3 by ion balance) vs ~160 L rain; that input ~0.6 tCO2e/ha ~= 40% of the ~1.6 gross cumulative. So absolute CDR is an upper bound (irrigation-corrected ~0.9-1.1 tCO2e/ha, less after downstream losses). Common-mode across pots, so treatment-vs-control comparisons are unaffected. First ~90 days = initial flush / Birch effect, not weathering.",
   "license": "CC-BY-4.0"
 }

@@ -23,9 +23,10 @@ Public releases of the Fürth-2022 dataset. Newest first.
   volume default model **`avgBD`** (best by out-of-sample plausibility check). Pipeline
   validated against the original project notebook (median relative error ≈ 0).
 - **Absolute CDR is gross export, not input-corrected:** it does not subtract the alkalinity
-  brought in by irrigation (2022 pots watered mainly with carbonate-bearing tap water), so it
-  is an upper bound. Common-mode across pots → treatment-vs-control comparisons unaffected.
-  First ~90 days = initial flush / Birch effect, not weathering. See README §5.
+  brought in by irrigation. In 2022 each pot got ~111 L hard tap water (Infra Fürth, 16.7 °dGH,
+  ≈ 5.1 mmol/L HCO₃⁻) ≈ 0.6 tCO₂e/ha ≈ 40 % of gross, so absolute CDR is an upper bound
+  (irrigation-corrected ≈ 0.9–1.1 tCO₂e/ha). Common-mode across pots → treatment-vs-control
+  comparisons unaffected. First ~90 days = initial flush / Birch effect. See README §5.
 - Figures branded with the Carbon Drawdown Initiative logo.
 - Released under **CC-BY-4.0**.
 
