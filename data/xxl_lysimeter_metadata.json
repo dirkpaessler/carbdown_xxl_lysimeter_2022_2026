@@ -1,0 +1,110 @@
+{
+  "description": "XXL Lysimeter measurement data (Carbon Drawdown Initiative)",
+  "generated_from": "AIR lab reports (CDIFUE21_AB*.xlsx) + logbook + PN protocols",
+  "surface_area_m2": 0.406,
+  "experiment_start_by_phase": {
+    "2022": "2022-05-15"
+  },
+  "days_definition": "days = date - 2022-05-15 (experiment start for soil Fürth 2022).",
+  "molar_masses_g_per_mol": {
+    "Ca": 40.078,
+    "Mg": 24.305,
+    "Na": 22.99,
+    "K": 39.098,
+    "Cl": 35.453,
+    "SO4": 96.06,
+    "NO3": 62.004,
+    "NO2": 46.005,
+    "HCO3": 61.017,
+    "Si": 28.086,
+    "Al": 26.982,
+    "Fe": 55.845,
+    "DOC": 12.011
+  },
+  "volume_variants": {
+    "volume_pumped": "own pumped volume at sampling (XLSX Bemerkung, else PN-PDF/OCR)",
+    "volume_avgBD": "old approach: A-pots = mean of parallel B/C/D pots",
+    "volume_dumpmodel": "pumped + logbook dumps since previous sampling"
+  },
+  "below_lod_convention": "values '<x' set to 0 (matches notebook); flagged in long format",
+  "known_missing_volume_dates": {},
+  "n_samples": 20,
+  "n_dates": 25,
+  "date_range": [
+    "2022-06-20",
+    "2026-02-25"
+  ],
+  "soils": {
+    "FUERTH2022": "Fürth 2022"
+  },
+  "validation_vs_notebook": {
+    "Na": {
+      "n": 383,
+      "median_rel_err": 1.733333386286374e-08,
+      "within_2pct": 0.9686684073107049
+    },
+    "K": {
+      "n": 383,
+      "median_rel_err": 1.3565935454678645e-07,
+      "within_2pct": 0.9660574412532638
+    },
+    "Ca": {
+      "n": 383,
+      "median_rel_err": 4.989812201345013e-05,
+      "within_2pct": 0.9660574412532638
+    },
+    "Mg": {
+      "n": 383,
+      "median_rel_err": 4.935515626940914e-08,
+      "within_2pct": 0.9660574412532638
+    },
+    "Cl": {
+      "n": 378,
+      "median_rel_err": 3.70966682289875e-08,
+      "within_2pct": 0.9682539682539683
+    },
+    "HCO3": {
+      "n": 383,
+      "median_rel_err": 3.277843010108623e-05,
+      "within_2pct": 0.9686684073107049
+    },
+    "NO3": {
+      "n": 258,
+      "median_rel_err": 4.842177446646114e-05,
+      "within_2pct": 0.9883720930232558
+    },
+    "SO4": {
+      "n": 371,
+      "median_rel_err": 4.163953777163149e-05,
+      "within_2pct": 0.967654986522911
+    },
+    "Si": {
+      "n": 383,
+      "median_rel_err": 1.7801052347453518e-05,
+      "within_2pct": 0.9686684073107049
+    },
+    "Al": {
+      "n": 143,
+      "median_rel_err": 2.0374584867746676e-05,
+      "within_2pct": 0.965034965034965
+    },
+    "Fe": {
+      "n": 199,
+      "median_rel_err": 0.00017858451831469674,
+      "within_2pct": 0.7587939698492462
+    },
+    "DOC": {
+      "n": 391,
+      "median_rel_err": 2.497639335997866e-05,
+      "within_2pct": 0.969309462915601
+    }
+  },
+  "outputs": {
+    "wide_csv": "xxl_lysimeter_data_wide.csv",
+    "long_csv": "xxl_lysimeter_data_long.csv",
+    "volumes_csv": "xxl_lysimeter_volumes.csv",
+    "parquet": null
+  },
+  "scope_note": "Public release: soil 'Fürth 2022' experiment only (started 2022-05-15). The 2025 'Griffelsberg' refill phase is a separate, not-yet-released experiment.",
+  "license": "CC-BY-4.0"
+}

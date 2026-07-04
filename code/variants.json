@@ -1,0 +1,136 @@
+{
+ "_comment": "Variant/treatment mapping for the Carbdown XXL Lysimeter experiment. 'variant' strings are the canonical sample names as used by the lab (Probenahmestelle). 'lab_aliases' maps misspelled/alternative lab names to canonical ones. Phase 2022: original experiment (soil Fürth 2022), started 2022. Phase 2025: 15 pots emptied and refilled with Griffelsberg soil in spring 2025; pots 000.A, 100.A, 200.A, 400.A and 400.E continue from the 2022 experiment.",
+ "soils": {
+  "FUERTH2022": {
+   "name": "Fürth 2022",
+   "description": "Original soil used when the experiment was built in 2022."
+  }
+ },
+ "lab_aliases": {
+  "MCT-M-S": "MTC-M-S"
+ },
+ "treatments": {
+  "000": {
+   "label": "Control",
+   "soil": "FUERTH2022",
+   "phase": 2022,
+   "feedstock": null,
+   "application_t_ha": 0,
+   "sensor": false
+  },
+  "100": {
+   "label": "100 t/ha",
+   "soil": "FUERTH2022",
+   "phase": 2022,
+   "feedstock": "Basalt",
+   "application_t_ha": 100,
+   "sensor": false
+  },
+  "200": {
+   "label": "200 t/ha",
+   "soil": "FUERTH2022",
+   "phase": 2022,
+   "feedstock": "Basalt",
+   "application_t_ha": 200,
+   "sensor": false
+  },
+  "400": {
+   "label": "400 t/ha",
+   "soil": "FUERTH2022",
+   "phase": 2022,
+   "feedstock": "Basalt",
+   "application_t_ha": 400,
+   "sensor": false
+  },
+  "FINE": {
+   "label": "200 t/ha fine",
+   "soil": "FUERTH2022",
+   "phase": 2022,
+   "feedstock": "Basalt (fine)",
+   "application_t_ha": 200,
+   "sensor": false
+  }
+ },
+ "variants": {
+  "000.A": {
+   "treatment": "000",
+   "replicate": "A"
+  },
+  "000.B": {
+   "treatment": "000",
+   "replicate": "B"
+  },
+  "000.C": {
+   "treatment": "000",
+   "replicate": "C"
+  },
+  "000.D": {
+   "treatment": "000",
+   "replicate": "D"
+  },
+  "100.A": {
+   "treatment": "100",
+   "replicate": "A"
+  },
+  "100.B": {
+   "treatment": "100",
+   "replicate": "B"
+  },
+  "100.C": {
+   "treatment": "100",
+   "replicate": "C"
+  },
+  "100.D": {
+   "treatment": "100",
+   "replicate": "D"
+  },
+  "200.A": {
+   "treatment": "200",
+   "replicate": "A"
+  },
+  "200.B": {
+   "treatment": "200",
+   "replicate": "B"
+  },
+  "200.C": {
+   "treatment": "200",
+   "replicate": "C"
+  },
+  "200.D": {
+   "treatment": "200",
+   "replicate": "D"
+  },
+  "400.A": {
+   "treatment": "400",
+   "replicate": "A"
+  },
+  "400.B": {
+   "treatment": "400",
+   "replicate": "B"
+  },
+  "400.C": {
+   "treatment": "400",
+   "replicate": "C"
+  },
+  "400.D": {
+   "treatment": "400",
+   "replicate": "D"
+  },
+  "000.E": {
+   "treatment": "FINE",
+   "replicate": "1"
+  },
+  "100.E": {
+   "treatment": "FINE",
+   "replicate": "2"
+  },
+  "200.E": {
+   "treatment": "FINE",
+   "replicate": "3"
+  },
+  "400.E": {
+   "treatment": "FINE",
+   "replicate": "4"
+  }
+ }
+}
