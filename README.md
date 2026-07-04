@@ -40,20 +40,19 @@ from measured bicarbonate export.
 ## 2. Scope of this release (please read)
 
 This release contains **only the "Fürth 2022" experiment** — the original soil and its
-five treatments. In spring 2025, fifteen of the pots were emptied and refilled with a
-different soil ("Griffelsberg") and new feedstocks; **that later experiment is not
-included here** and will be released separately when it is written up.
+five treatments. In spring 2025, most of the pots were repurposed for a separate,
+not-yet-published follow-on experiment; **that later work is not included here** and will
+be released separately when it is written up.
 
-**Continuing pots and the sensor time series.** After the 2025 refill, only five pots
+**Continuing pots and the sensor time series.** After the 2025 changeover, only five pots
 remain in the original Fürth-2022 soil: `000.A`, `100.A`, `200.A`, `400.A` and `400.E`.
 The leachate/TA tables are cleanly separated by soil, so they contain Fürth-2022 rows
 throughout. For the buried **soil-sensor** series we keep, after `2025-05-15`, **only
-these five continuing pots** (readings from the refilled pots, which now sit in
-Griffelsberg soil, are removed). Soil temperature is reported at the site level and could
-not be attributed to individual pots, so the temperature series **ends at the refill
-date** `2025-05-15`; soil CO₂ comes only from the four continuing A-pots and runs the full
-length. All other sensor products (EC, pH, moisture) run to the end of 2025 for the
-continuing pots.
+these five continuing pots** (readings from the repurposed pots are removed). Soil
+temperature is reported at the site level and could not be attributed to individual pots,
+so the temperature series **ends at** `2025-05-15`; soil CO₂ comes only from the four
+continuing A-pots and runs the full length. All other sensor products (EC, pH, moisture)
+run to the end of 2025 for the continuing pots.
 
 ## 3. Repository layout
 

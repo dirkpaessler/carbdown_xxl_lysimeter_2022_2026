@@ -10,14 +10,15 @@ Public releases of the Fürth-2022 dataset. Newest first.
   chemistry and cumulative bicarbonate export (local CDR), buried soil-sensor time series,
   on-site and official weather, and feedstock characterization. Companion to the two-year
   greenhouse dataset.
-- **Scope: Fürth-2022 experiment only.** The 2025 "Griffelsberg" refill phase (new soil,
-  new feedstocks) is intentionally excluded and will be released separately.
-- **Sensor provenance after the 2025 refill:** only the five continuing Fürth-2022 pots
+- **Scope: Fürth-2022 experiment only.** A 2025 follow-on experiment (most pots repurposed
+  with a new soil and new feedstocks) is intentionally excluded and will be released
+  separately.
+- **Sensor provenance after the 2025 changeover:** only the five continuing Fürth-2022 pots
   (`000.A`, `100.A`, `200.A`, `400.A`, `400.E`) are retained in the soil-sensor products
-  after `2025-05-15`; refilled-pot readings (now in Griffelsberg soil) are removed. Soil
-  temperature is site-level and could not be pot-attributed, so it ends at the refill date;
-  soil CO₂ (four continuing A-pots) and the other sensors (EC, pH, moisture, continuing
-  pots) run to the end of 2025.
+  after `2025-05-15`; readings from the repurposed pots are removed. Soil temperature is
+  site-level and could not be pot-attributed, so it ends at `2025-05-15`; soil CO₂ (four
+  continuing A-pots) and the other sensors (EC, pH, moisture, continuing pots) run to the
+  end of 2025.
 - Provenance: surface area **0.406 m²/pot**; CO₂ factor **1 mol CO₂ / mol HCO₃⁻**; leachate
   volume default model **`avgBD`** (best by out-of-sample plausibility check). Pipeline
   validated against the original project notebook (median relative error ≈ 0).

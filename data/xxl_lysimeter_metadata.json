@@ -105,6 +105,6 @@
     "volumes_csv": "xxl_lysimeter_volumes.csv",
     "parquet": null
   },
-  "scope_note": "Public release: soil 'Fürth 2022' experiment only (started 2022-05-15). The 2025 'Griffelsberg' refill phase is a separate, not-yet-released experiment.",
+  "scope_note": "Public release: soil 'Fürth 2022' experiment only (started 2022-05-15). A 2025 follow-on experiment (most pots repurposed with a new soil) is separate and not yet released.",
   "license": "CC-BY-4.0"
 }

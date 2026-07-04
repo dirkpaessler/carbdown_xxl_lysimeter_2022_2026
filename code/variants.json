@@ -1,14 +1,12 @@
 {
- "_comment": "Variant/treatment mapping for the Carbdown XXL Lysimeter experiment. 'variant' strings are the canonical sample names as used by the lab (Probenahmestelle). 'lab_aliases' maps misspelled/alternative lab names to canonical ones. Phase 2022: original experiment (soil Fürth 2022), started 2022. Phase 2025: 15 pots emptied and refilled with Griffelsberg soil in spring 2025; pots 000.A, 100.A, 200.A, 400.A and 400.E continue from the 2022 experiment.",
+ "_comment": "Variant/treatment mapping for the Carbdown XXL Lysimeter experiment (Fürth 2022). 'variant' strings are the canonical sample names as used by the lab (Probenahmestelle). 'lab_aliases' maps misspelled/alternative lab names to canonical ones. In 2025 most pots were repurposed for a separate follow-on experiment; pots 000.A, 100.A, 200.A, 400.A and 400.E continue in the original 2022 soil.",
  "soils": {
   "FUERTH2022": {
    "name": "Fürth 2022",
    "description": "Original soil used when the experiment was built in 2022."
   }
  },
- "lab_aliases": {
-  "MCT-M-S": "MTC-M-S"
- },
+ "lab_aliases": {},
  "treatments": {
   "000": {
    "label": "Control",

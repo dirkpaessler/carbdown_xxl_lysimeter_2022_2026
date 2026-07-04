@@ -69,12 +69,3 @@ Applied 4–6 weeks after planting, mixed into the top 15 cm of soil.
 > notebook used 0.48 m²; all area-normalised results (mmol/m², tCO₂/ha) are therefore
 > ×0.48/0.406 = 1.182 higher than that earlier analysis. Concentrations, volumes and
 > the mass-based validation are unaffected.
-
-## Other feedstocks (Table 5)
-
-- **Müllerkalk** (MKL, limestone): 85 % calcite / 14 % dolomite, 90 % < 365 µm,
-  0.9 m²/g.
-- **Glacial Rock Flour** (GRF, Greenland, Rock Flour Company): felsic glacial
-  sediment, 90 % < 10 µm, mean 2.8 µm, 19.5 m²/g, 254 kg CO₂/t.
-- Tichum Basalt (TIB) and Monticellite (MTC) from the 2025 Griffelsberg refill are
-  not yet characterised in the Jan-2025 whitepaper.

@@ -43,11 +43,11 @@ Each sampling gets the rainfall & mean temperature over its sampling interval:
 - `rain_interval_mm`, `temp_mean_interval_C` — from **DWD** (available for every
   sampling, whole experiment).
 - `rain_interval_onsite_mm`, `temp_mean_interval_onsite_C` — from **on-site Ecowitt**
-  (only intervals fully covered, i.e. 2024-07 onward → all Griffelsberg samplings).
+  (only intervals fully covered, i.e. 2024-07 onward).
 
-**Recommendation:** for the 2025 Griffelsberg experiment prefer the on-site Ecowitt
-rain (best spatial match); for the 2022–2025 Fürth experiment use DWD (on-site does
-not reach back). Both are provided so the downstream can choose.
+**Recommendation:** for the Fürth-2022 experiment use DWD (the on-site gauges do not
+reach back to 2022); the on-site Ecowitt rain is the best spatial match for later
+intervals. Both are provided so the downstream can choose.
 
 ## Not usable / not fetched
 
