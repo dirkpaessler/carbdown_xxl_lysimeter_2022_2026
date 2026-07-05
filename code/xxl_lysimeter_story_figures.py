@@ -205,32 +205,60 @@ def main():
     brand.add_logo(fig, ax=ax, loc="lower right", frac=0.12)
     fig.savefig(FIG / "story_3_seasonal_breathing.png", bbox_inches="tight"); plt.close(fig)
 
-    # ===== FIGURE 4: moisture confounder =====================================
-    fig, (a0, a1) = plt.subplots(1, 2, figsize=(12.5, 5), gridspec_kw=dict(width_ratios=[1.5, 1]))
+    # ===== FIGURE 4: moisture confounder (redesigned) ========================
+    fig, (a0, a1) = plt.subplots(1, 2, figsize=(12.5, 5.2),
+                                 gridspec_kw=dict(width_ratios=[1.55, 1]))
     g = potsens.dropna(subset=["soil_ec_60cm", "soil_moisture_60cm_pct"])
-    a0.scatter(g["soil_moisture_60cm_pct"], g["soil_ec_60cm"], s=12, color=OK["blue"],
-               alpha=0.35, edgecolors="none")
-    a0.axvline(10, color=OK["verm"], ls="--", lw=1.5)
-    a0.text(10.3, a0.get_ylim()[1] * 0.92, "10 % VWC — below this the\nEC sensor loses contact",
-            fontsize=8.5, color=OK["verm"])
-    a0.set_xlabel("Soil moisture at 60 cm (% VWC)"); a0.set_ylabel("Soil EC sensor at 60 cm")
-    a0.set_title("Bulk soil EC collapses when the soil dries out", fontsize=11)
-    # raw vs partial bars
-    labels = ["EC 30 cm", "EC 60 cm"]
-    raw = [0.39, 0.71]; par = [0.55, 0.77]
-    x = np.arange(2)
-    a1.bar(x - 0.2, raw, 0.38, color=OK["grey"], label="raw r")
-    a1.bar(x + 0.2, par, 0.38, color=OK["green"], label="controlling for moisture")
-    for xi, (r, p) in enumerate(zip(raw, par)):
-        a1.text(xi - 0.2, r + 0.01, f"{r:.2f}", ha="center", fontsize=9)
-        a1.text(xi + 0.2, p + 0.01, f"{p:.2f}", ha="center", fontsize=9)
-    a1.set_xticks(x); a1.set_xticklabels(labels); a1.set_ylim(0, 0.9)
-    a1.set_ylabel("r: soil EC ↔ leachate EC"); a1.legend(frameon=False, fontsize=9)
-    a1.set_title("Removing the moisture effect\nmakes the real signal stronger", fontsize=11)
-    fig.suptitle("Soil moisture is a measurement confounder for EC/pH — filtered and controlled",
+    xm = g["soil_moisture_60cm_pct"].to_numpy(); ym = g["soil_ec_60cm"].to_numpy()
+    xlo, xhi = 4.0, np.ceil(xm.max()) + 0.5
+    a0.set_xlim(xlo, xhi)
+    a0.axvspan(xlo, 10, color=OK["verm"], alpha=0.09, lw=0)
+    a0.scatter(xm, ym, s=13, color=OK["blue"], alpha=0.40, edgecolors="none",
+               label="soil-EC readings (≥ 10 % VWC)")
+    edges = np.arange(np.floor(xm.min()), np.ceil(xm.max()) + 2, 2.0)         # median-EC trend
+    bx, by = [], []
+    for lo, hi in zip(edges[:-1], edges[1:]):
+        m = (xm >= lo) & (xm < hi)
+        if m.sum() >= 5:
+            bx.append((lo + hi) / 2); by.append(np.median(ym[m]))
+    a0.plot(bx, by, "-o", color="#111111", lw=2.4, ms=4, zorder=6, label="median EC")
+    a0.axvline(10, color=OK["verm"], ls="--", lw=1.6)
+    a0.text(7.0, float(np.nanmax(ym)) * 0.5, "< 10 % VWC\nprobe loses\ncontact →\ndropped",
+            ha="center", va="center", fontsize=8.5, color=OK["verm"])
+    a0.set_xlabel("Soil moisture at 60 cm (% VWC)")
+    a0.set_ylabel("Soil EC sensor at 60 cm (µS/cm)")
+    a0.set_title("Bulk soil-EC climbs with moisture — a confounder to remove", fontsize=11.5)
+    a0.legend(frameon=False, fontsize=8.5, loc="lower right")
+
+    # ---- right: raw → moisture-controlled r as a dumbbell ----
+    pc = pd.read_csv(OUT / "monitoring_partialcorr_moisture_controlled.csv")
+
+    def _rr(sc):
+        row = pc[(pc["leachate"] == "EC (lab)") & (pc["sensor"] == sc)].iloc[0]
+        return float(row["r_raw"]), float(row["r_partial_moisture"])
+
+    for lab, yv, sc in [("EC 60 cm", 1, "soil_ec_60cm"), ("EC 30 cm", 0, "soil_ec_30cm")]:
+        r0, r1 = _rr(sc)
+        a1.annotate("", xy=(r1, yv), xytext=(r0, yv),
+                    arrowprops=dict(arrowstyle="-|>", color=OK["green"], lw=2.4, alpha=0.9), zorder=2)
+        a1.scatter([r0], [yv], s=95, color=OK["grey"], zorder=3)
+        a1.scatter([r1], [yv], s=115, color=OK["green"], zorder=3)
+        a1.text(r0 - 0.015, yv, f"{r0:.2f}", ha="right", va="center", fontsize=10,
+                color=OK["grey"], weight="bold")
+        a1.text(r1 + 0.015, yv, f"{r1:.2f}", ha="left", va="center", fontsize=10,
+                color=OK["green"], weight="bold")
+    a1.set_yticks([0, 1]); a1.set_yticklabels(["EC 30 cm", "EC 60 cm"], fontsize=11)
+    a1.set_ylim(-0.7, 1.7); a1.set_xlim(0.15, 0.9)
+    a1.set_xlabel("r: soil EC ↔ leachate EC")
+    a1.set_title("Controlling for moisture\nstrengthens the real signal", fontsize=11.5)
+    a1.scatter([], [], s=95, color=OK["grey"], label="raw")
+    a1.scatter([], [], s=115, color=OK["green"], label="moisture-controlled")
+    a1.legend(frameon=False, fontsize=8.5, loc="lower right")
+
+    fig.suptitle("Soil moisture is a measurement confounder — drop the dry readings, control for the rest",
                  fontsize=13, weight="bold")
     fig.tight_layout(rect=(0, 0, 1, 0.95))
-    brand.add_logo(fig, ax=a0, loc="upper right", frac=0.17)
+    brand.add_logo(fig, ax=a0, loc="upper right", frac=0.15)
     fig.savefig(FIG / "story_4_moisture_confounder.png", bbox_inches="tight"); plt.close(fig)
 
     # ===== FIGURE 5: soil CO2 by treatment over time =========================
