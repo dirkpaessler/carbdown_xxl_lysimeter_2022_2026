@@ -4,6 +4,14 @@ Public releases of the Fürth-2022 dataset. Newest first.
 
 ---
 
+## v1.2 — 2026-07-05 — Educational article 5; a repeated Birch effect
+- Added `figures/co2_5_birch_rewetting.png`: aligning daily soil CO₂ at each deep dry→wet
+  transition reveals a **repeated Birch effect** — a respiration burst on rewetting (large in
+  summer, weak in cool autumn) and a soil-EC salt flush after every event.
+- Upgraded the engine figure to a LOWESS + bootstrap-CI band (`co2_3_temp_moisture_engine.png`);
+  removed the binned `co2_3b` variant. `code/xxl_lysimeter_soil_co2.py` emits `co2_1..5`.
+  Article 5 retitled/reframed as educational. **No data values changed.**
+
 ## v1.1 — 2026-07-05 — Per-pot soil CO₂ added; article 5 becomes a deep dive
 
 - **New data: a soil-CO₂ sensor in every pot.** Added `data/soil_co2_by_pot_daily.csv` (daily

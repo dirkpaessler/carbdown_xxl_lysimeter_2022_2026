@@ -196,13 +196,17 @@ out-of-sample check — see `data/xxl_lysimeter_volume_strategy_plausibility.csv
   +0.58); with a sensor now in every pot, confirmed per-pot (+0.78 / −0.68 / +0.36).
   → `figures/story_2_weathering_mechanism_chain.png`, `story_3_seasonal_breathing.png`,
   `co2_1_seasonal_breathing_by_dose.png`.
-- **Soil CO₂: the weathering engine, not a carbon meter.** With one soil-CO₂ sensor in *every*
-  pot (n = 4/dose), the dose still does not separate (400 t/ha ~18 % low but n.s.). CO₂ drives
-  leachate acidity strongly (pH r = −0.68) but meters alkalinity only weakly (TA r = +0.36,
-  vs EC ↔ TA +0.63). CO₂ climbs with temperature then **reverses above ~18 °C** as the soil
-  dries and microbes go dormant — a temperature × moisture limit.
-  → `figures/co2_2_dose_forest.png`, `co2_4_engine_not_meter.png`,
-  `co2_3b_temp_moisture_CI.png` (with 95 % CI bands); data `data/soil_co2_by_pot_daily.csv`.
+- **Soil CO₂: what the living soil tells us — the weathering engine, not a carbon meter.**
+  With a soil-CO₂ sensor in *every* pot (n = 4/dose): soil CO₂ runs 5–20× outdoor air and
+  climbs with temperature, then **reverses above ~18 °C** as the soil dries (temperature ×
+  moisture limit). Every dry→wet transition sets off a **repeated Birch effect** — a
+  respiration burst (CO₂, only when warm) and a salt flush (EC, every time). CO₂ drives
+  leachate acidity strongly (pH r = −0.68) but meters alkalinity only weakly (TA r = +0.36 vs
+  EC ↔ TA +0.63) — the engine, not the meter. The basalt dose changes none of it (400 t/ha
+  ~18 % low, n.s.).
+  → `figures/co2_3_temp_moisture_engine.png`, `co2_5_birch_rewetting.png`,
+  `co2_4_engine_not_meter.png`, `co2_2_dose_forest.png`, `co2_1_seasonal_breathing_by_dose.png`;
+  data `data/soil_co2_by_pot_daily.csv`.
 - **Confounders handled explicitly:** sensor age (survivorship falls from ~20 to a handful;
   time-detrended correlations survive). Dry-soil noise is a non-issue for the leachate
   comparison — the soil is always wet when leachate is pumped.
@@ -231,7 +235,7 @@ in our main experiment repository and is not needed to consume this dataset.
 2. *Does more basalt mean more CO₂ removal? What 1400 days actually show.*
 3. *The soil breathes: how temperature and CO₂ drive the weathering signal.*
 4. *Can a buried EC sensor stand in for lab alkalinity? In-situ EC as a continuous MRV proxy.*
-5. *Can soil CO₂ measure carbon removal? A deep dive into the gas in the ground.*
+5. *What the soil tells us when it breathes: reading four years of buried CO₂ sensors.*
 6. *Four years of buried sensors: rainfall, ambient data and sensor survivorship.*
 
 *(Article 1 published; parts 2–6 in preparation — links added on publication.)*
