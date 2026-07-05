@@ -136,10 +136,10 @@ Full units, molar masses and provenance are in **`data/xxl_lysimeter_metadata.js
 - **Gross export — not input-corrected.** Export = leachate concentration × drainage volume.
   It is *not* netted against the alkalinity carried in by the irrigation water. In the first
   summer (2022) each pot received ~111 L of hard municipal tap water (Infra Fürth, 16.7 °dGH,
-  ≈ 5.1 mmol/L bicarbonate by ion balance) vs ~160 L rain. That input ≈ **0.6 tCO₂e/ha**,
-  about **40 %** of the ~1.6 tCO₂e/ha gross cumulative — so the absolute CDR figures are an
-  **upper bound** (irrigation-corrected ≈ 0.9–1.1 tCO₂e/ha, less again after downstream
-  losses). This is common-mode across all pots, so it does **not** affect the
+  ≈ 5.1 mmol/L bicarbonate by ion balance) vs ~160 L rain. That input is of order **0.5 tCO₂e/ha**
+  (up to ~0.6 as a strict mass-balance ceiling), roughly a **third** of the ~1.6 tCO₂e/ha
+  gross cumulative — so the absolute CDR figures are an **upper bound** (irrigation-corrected
+  ≈ 1.0–1.1 tCO₂e/ha, less again after downstream losses). This is common-mode across all pots, so it does **not** affect the
   treatment-vs-control comparison (irrigation-corrected treatment−control ≈ −0.06…+0.11).
 - **Early phase (first ~90 days) is unrepresentative** — an initial flush (Birch effect:
   rewetting of the freshly built, disturbed soil after the first big drainage, Aug 2022), not
@@ -170,7 +170,7 @@ out-of-sample check — see `data/xxl_lysimeter_volume_strategy_plausibility.csv
   → `figures/slide1_TA_export_headline.png`, `alt_FUERTH2022_alkalinity_cumflux.png`,
   `alt_FUERTH2022_significance_vs_control.png`, `slide2_mixedmodel_forest.png`.
 - **The irrigation-water blank.** In 2022 the pots were watered with ~111 L/pot of hard tap
-  water (≈ 5.1 mmol/L HCO₃⁻) ≈ 0.6 tCO₂e/ha ≈ 40 % of the gross cumulative — common to every
+  water (≈ 5.1 mmol/L HCO₃⁻) of order 0.5 tCO₂e/ha (up to ~0.6 ceiling), ~a third of gross — common to every
   pot, so it does not change the dose comparison but lowers the absolute CDR (see §5).
   → `figures/water_irrigation_share_2022.png`, `figures/TA_cumulative_gross_vs_net_tapwater.png`.
 - **A buried EC sensor tracks leachate chemistry.** The 60 cm soil-EC probe correlates

@@ -124,13 +124,14 @@ def main():
     b0.fill_between(cum_input.index, 0, -cum_input.values * 0 + cum_input.values,
                     color="#D55E00", alpha=0.0)  # placeholder (keep axes clean)
     b0.legend(frameon=False, fontsize=9, loc="upper left")
-    fig.suptitle("Accumulated CDR with and without the tap-water blank — the ~0.6 tCO₂e/ha "
-                 "irrigation input is common to every pot", fontsize=13, weight="bold")
-    fig.text(0.5, 0.005, "Net = gross − cumulative tap-water alkalinity input "
-             "(111 L/pot × 5.1 mmol/L HCO₃⁻, all in by Aug 2022). The blank shifts every "
-             "treatment down by the same amount, so it does NOT change treatment-vs-control "
-             "(the dose result is unaffected). Net dips below zero in summer 2022 while the "
-             "soil still holds the tap-water alkalinity, then recovers as it flushes.",
+    fig.suptitle("Accumulated CDR with and without the tap-water blank — a common ~0.5 tCO₂e/ha "
+                 "input (up to ~0.6 mass-balance ceiling) shifts every pot equally",
+                 fontsize=13, weight="bold")
+    fig.text(0.5, 0.005, "Net = gross − cumulative tap-water alkalinity input. Mass-balance "
+             "ceiling 111 L/pot × 5.1 mmol/L HCO₃⁻ = 0.61 tCO₂e/ha (shown); conservatively "
+             "~0.5 allowing for HCO₃ uncertainty and minor retention. Common to every pot, so "
+             "it does NOT change treatment-vs-control (the dose result is unaffected). Net dips "
+             "below zero in summer 2022 while the soil still holds the input, then recovers.",
              ha="center", fontsize=8, color="#666")
     fig.tight_layout(rect=(0, 0.05, 1, 0.95))
     brand.add_logo(fig, ax=b1, loc="lower right", frac=0.13)
