@@ -128,8 +128,8 @@ pot and as a site mean (`soil_moisture_*`, `soil_temp_30cm_C`, `soil_ec_*`, `soi
 **each of the 20 pots** (`date`, `treatment`, `pot_id`, `sensor_serial`, `soil_co2_ppm`);
 0, sub-400 (sub-atmospheric) and >40,000 ppm readings removed, control de-duplicated. Raw
 per-pot exports in `monitoring/soil_co2_by_pot_raw/`. Rebuild figures with
-`code/xxl_lysimeter_soil_co2.py`. The tank/"MIXED" sensor (a fourth FINE pot) is split out to
-`data/tank_co2_daily_mixed.csv`.
+`code/xxl_lysimeter_soil_co2.py`. The export labelled "MIXED" is a fourth FINE pot, included
+here as `FINE200.MIXED`.
 
 **`weather/weather_daily_combined.csv`** — daily `rain_onsite_mm` / `rain_official_mm`
 (DWD 03668) and `temp_onsite_C` / `temp_official_C`.
@@ -197,7 +197,7 @@ out-of-sample check — see `data/xxl_lysimeter_volume_strategy_plausibility.csv
   → `figures/story_2_weathering_mechanism_chain.png`, `story_3_seasonal_breathing.png`,
   `co2_1_seasonal_breathing_by_dose.png`.
 - **Soil CO₂: the weathering engine, not a carbon meter.** With one soil-CO₂ sensor in *every*
-  pot (n = 4/dose), the dose still does not separate (400 t/ha ~13 % low but n.s.). CO₂ drives
+  pot (n = 4/dose), the dose still does not separate (400 t/ha ~18 % low but n.s.). CO₂ drives
   leachate acidity strongly (pH r = −0.68) but meters alkalinity only weakly (TA r = +0.36,
   vs EC ↔ TA +0.63). CO₂ climbs with temperature then **reverses above ~18 °C** as the soil
   dries and microbes go dormant — a temperature × moisture limit.

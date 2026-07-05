@@ -8,13 +8,13 @@ Public releases of the Fürth-2022 dataset. Newest first.
 
 - **New data: a soil-CO₂ sensor in every pot.** Added `data/soil_co2_by_pot_daily.csv` (daily
   ~20 cm CO₂ for all **20 pots**, n = 4 per dose — not one per treatment as previously stated),
-  with raw exports in `monitoring/soil_co2_by_pot_raw/` and the tank/"MIXED" trace (a fourth
-  FINE pot) in `data/tank_co2_daily_mixed.csv`. Cleaning: 0, sub-400 ppm (below atmospheric)
+  with raw exports in `monitoring/soil_co2_by_pot_raw/`; the "MIXED" export is a fourth FINE
+  pot, included as `FINE200.MIXED`. Cleaning: 0, sub-400 ppm (below atmospheric)
   and >40,000 ppm removed; control de-duplicated across the treatment exports on sensor + date.
 - **New analysis + figures** (`code/xxl_lysimeter_soil_co2.py`): `co2_1_seasonal_breathing_by_dose`,
   `co2_2_dose_forest`, `co2_3_temp_moisture_engine`, `co2_4_engine_not_meter`.
-- **Findings.** Even with n = 4/dose, no significant dose effect on soil CO₂ (400 t/ha ~13 % low,
-  p > 0.5). Soil CO₂ drives leachate acidity (pH r = −0.68) but meters alkalinity only weakly
+- **Findings.** Even with n = 4/dose, no significant dose effect on soil CO₂ (400 t/ha ~18 % low,
+  p = 0.33). Soil CO₂ drives leachate acidity (pH r = −0.68) but meters alkalinity only weakly
   (TA r = +0.36 vs EC ↔ TA +0.63) — engine, not meter. CO₂ rises with temperature then reverses
   above ~18 °C as the soil dries (temperature × moisture limit). Mechanism chain confirmed
   per-pot. Removed the retired `story_5` framing from §7; article 5 retitled to the deep dive.
