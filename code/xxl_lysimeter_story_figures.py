@@ -92,29 +92,7 @@ def main():
     brand.add_logo(fig, loc="upper right", frac=0.13)
     fig.savefig(FIG / "story_1_soilEC_predicts_leachateEC.png", bbox_inches="tight"); plt.close(fig)
 
-    # ===== FIGURE 2: mechanism chain temp -> CO2 -> pH / TA ===================
-    fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.6))
-    pairs = [("soil_temp_30cm_C", "soil_co2_ppm", "Soil temperature (°C)", "Soil CO₂ (ppm)",
-              "warmer soil → more respiration → more CO₂", OK["orange"]),
-             ("soil_co2_ppm", "pH", "Soil CO₂ (ppm)", "Leachate pH",
-              "more CO₂ → carbonic acid → lower pH", OK["purple"]),
-             ("soil_co2_ppm", "TA", "Soil CO₂ (ppm)", "Leachate alkalinity TA (µmol/l)",
-              "more CO₂ → more weathering → more TA", OK["green"])]
-    for ax, (xc, yc, xl, yl, sub, col) in zip(axes, pairs):
-        g = lea.dropna(subset=[xc, yc])
-        ax.scatter(g[xc], g[yc], s=40, color=col, alpha=0.8, edgecolors="white", linewidths=0.5)
-        _fit(ax, g[xc], g[yc], "#111111")
-        ax.set_xlabel(xl); ax.set_ylabel(yl); ax.set_title(sub, fontsize=10.5)
-    fig.suptitle("The enhanced-weathering engine, visible in the sensors:  "
-                 "temperature → soil CO₂ → acidity & alkalinity", fontsize=13, weight="bold")
-    fig.text(0.5, 0.01, "Site-mean sensors vs. mean leachate per sampling (old Fürth pots). "
-             "Temperature and CO₂ co-vary seasonally; both remain linked to pH after mutual control.",
-             ha="center", fontsize=8, color="#666")
-    fig.tight_layout(rect=(0, 0.04, 1, 0.94))
-    brand.add_logo(fig, ax=axes[1], loc="upper right", frac=0.30)
-    fig.savefig(FIG / "story_2_weathering_mechanism_chain.png", bbox_inches="tight"); plt.close(fig)
-
-    # ===== FIGURE 2b: mechanism chain SEPARATED BY TREATMENT =================
+    # ---- per-treatment sensor/leachate data (used by figures 2 and 2b) ----
     co2raw = pd.read_excel(MON / "co2_concentrations.xlsx")
     co2raw.columns = [str(c).strip() for c in co2raw.columns]
     co2raw["date"] = pd.to_datetime(co2raw["Zeitstempel"], errors="coerce").dt.normalize()
@@ -135,10 +113,6 @@ def main():
             out.append(s.iloc[j] if dd[j] <= tol else np.nan)
         return out
 
-    stages = [("temp", "co2", "Soil temperature (°C, site)", "Soil CO₂ (ppm)",
-               "temperature → soil CO₂"),
-              ("co2", "pH", "Soil CO₂ (ppm)", "Leachate pH", "soil CO₂ → pH"),
-              ("co2", "TA", "Soil CO₂ (ppm)", "Leachate TA (µmol/l)", "soil CO₂ → TA")]
     trs = ["000", "100", "200", "400"]     # FINE has no soil-CO₂ sensor
     per_tr = {}
     for tr in trs:
@@ -147,6 +121,41 @@ def main():
         le["co2"] = near_series(co2_series(tr), le["date"])
         le["temp"] = near_series(site["soil_temp_30cm_C"].dropna(), le["date"])
         per_tr[tr] = le
+
+    # ===== FIGURE 2: mechanism chain, dots coloured by basalt dose, pooled fit =====
+    stage2 = [("temp", "co2", "Soil temperature (°C)", "Soil CO₂ (ppm)",
+               "warmer soil → more respiration → more CO₂"),
+              ("co2", "pH", "Soil CO₂ (ppm)", "Leachate pH",
+               "more CO₂ → carbonic acid → lower pH"),
+              ("co2", "TA", "Soil CO₂ (ppm)", "Leachate alkalinity TA (µmol/l)",
+               "more CO₂ → more weathering → more TA")]
+    fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.6))
+    for ax, (xc, yc, xl, yl, sub) in zip(axes, stage2):
+        xs_all, ys_all = [], []
+        for tr in trs:
+            c, lab = TRSTYLE[tr]
+            g = per_tr[tr].dropna(subset=[xc, yc])
+            ax.scatter(g[xc], g[yc], s=34, color=c, alpha=0.75, edgecolors="white",
+                       linewidths=0.4, label=(lab if ax is axes[0] else None))
+            xs_all.append(g[xc]); ys_all.append(g[yc])
+        _fit(ax, pd.concat(xs_all), pd.concat(ys_all), "#111111")     # pooled trend + r (all doses)
+        ax.set_xlabel(xl); ax.set_ylabel(yl); ax.set_title(sub, fontsize=10.5)
+    axes[0].legend(frameon=False, fontsize=8, loc="lower right")
+    fig.suptitle("The enhanced-weathering engine, visible in the sensors:  "
+                 "temperature → soil CO₂ → acidity & alkalinity", fontsize=13, weight="bold")
+    fig.text(0.5, 0.01, "Dots coloured by basalt dose (soil CO₂ = each dose's own A-pot sensor; "
+             "temperature = site mean; leachate pH/TA = per-treatment mean per sampling). Black "
+             "line = pooled fit across all doses. Nearest sensor within ±10 days. FINE has no soil-CO₂ sensor.",
+             ha="center", fontsize=8, color="#666")
+    fig.tight_layout(rect=(0, 0.04, 1, 0.94))
+    brand.add_logo(fig, ax=axes[1], loc="upper right", frac=0.30)
+    fig.savefig(FIG / "story_2_weathering_mechanism_chain.png", bbox_inches="tight"); plt.close(fig)
+
+    # ===== FIGURE 2b: mechanism chain SEPARATED BY TREATMENT (per-dose fits) =====
+    stages = [("temp", "co2", "Soil temperature (°C, site)", "Soil CO₂ (ppm)",
+               "temperature → soil CO₂"),
+              ("co2", "pH", "Soil CO₂ (ppm)", "Leachate pH", "soil CO₂ → pH"),
+              ("co2", "TA", "Soil CO₂ (ppm)", "Leachate TA (µmol/l)", "soil CO₂ → TA")]
     fig, axes = plt.subplots(1, 3, figsize=(14, 5.0))
     for k, (xc, yc, xl, yl, ttl) in enumerate(stages):
         ax = axes[k]

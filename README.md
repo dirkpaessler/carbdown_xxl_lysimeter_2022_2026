@@ -179,8 +179,9 @@ out-of-sample check — see `data/xxl_lysimeter_volume_strategy_plausibility.csv
   **r ≈ 0.77** after controlling for soil moisture. **The 30 cm sensor barely works**
   (0.39 → 0.55). → `figures/story_1_soilEC_predicts_leachateEC.png`,
   `monitoring_soilEC_vs_leachateEC_by_treatment_depth.png`, `story_4_moisture_confounder.png`.
-- **The soil breathes.** Temperature → soil CO₂ (+0.63), soil CO₂ → leachate pH (−0.76),
-  soil CO₂ → leachate TA (+0.53); a seasonal weathering engine, consistent across doses.
+- **The soil breathes.** Temperature → soil CO₂ (+0.58), soil CO₂ → leachate pH (−0.74),
+  soil CO₂ → leachate TA (+0.58), pooled across doses; a seasonal weathering engine,
+  consistent across doses.
   → `figures/story_2_weathering_mechanism_chain.png`, `story_2b_*`, `story_3_seasonal_breathing.png`.
 - **A weathering fingerprint in soil CO₂?** 400 t/ha tends lowest (possible drawdown) but
   n = 1 sensor/treatment and sensors die → suggestive only.
