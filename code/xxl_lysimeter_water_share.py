@@ -142,16 +142,17 @@ def main():
     fig.text(0.5, 0.945, "Afterwards only rainwater entered the experiment",
              ha="center", fontsize=10.5, color="#555")
     import textwrap
-    foot = ("Accumulated bicarbonate export per treatment, as measured (gross) vs minus the "
-            "tap-water blank. That blank — a common ~0.5 tCO₂e/ha (up to ~0.6 mass-balance "
-            "ceiling; 111 L/pot × 5.1 mmol/L HCO₃⁻), all in by Aug 2022 — is identical for every "
-            "pot, so it does not change treatment-vs-control (the dose result is unaffected). "
-            "Shaded: 95 % CI across replicate pots (n ≤ 4); hatched: last CI carried forward for "
-            "the single pot continuing past the 2025 refill. Net dips below zero in summer 2022 "
-            "while the soil still holds the input, then recovers as it flushes. Volume model avgBD.")
+    foot = ("Tap water added in 2022: 111 L per pot at 5.1 mmol/L HCO₃⁻ (≈310 mg/L; Infra Fürth, "
+            "16.7 °dGH) — a common blank of ~0.5 tCO₂e/ha (up to ~0.6 mass-balance ceiling), all in "
+            "by Aug 2022 and identical for every pot, so it does not change treatment-vs-control "
+            "(the dose result is unaffected). Accumulated bicarbonate export per treatment, gross "
+            "(left) vs minus that blank (right). Shaded: 95 % CI across replicate pots (n ≤ 4); "
+            "hatched: last CI carried forward for the single pot continuing past the 2025 refill. "
+            "Net dips below zero in summer 2022 while the soil still holds the input, then recovers. "
+            "Volume model avgBD.")
     fig.text(0.5, 0.015, "\n".join(textwrap.wrap(foot, 118)), ha="center", va="bottom",
              fontsize=7.5, color="#666")
-    fig.tight_layout(rect=(0, 0.14, 1, 0.92))
+    fig.tight_layout(rect=(0, 0.16, 1, 0.92))
     brand.add_logo(fig, ax=b1, loc="lower right", frac=0.12)
     p2 = FIG / "TA_cumulative_gross_vs_net_tapwater.png"
     fig.savefig(p2, bbox_inches="tight"); plt.close(fig)
