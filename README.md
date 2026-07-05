@@ -202,7 +202,7 @@ out-of-sample check — see `data/xxl_lysimeter_volume_strategy_plausibility.csv
   vs EC ↔ TA +0.63). CO₂ climbs with temperature then **reverses above ~18 °C** as the soil
   dries and microbes go dormant — a temperature × moisture limit.
   → `figures/co2_2_dose_forest.png`, `co2_4_engine_not_meter.png`,
-  `co2_3_temp_moisture_engine.png`; data `data/soil_co2_by_pot_daily.csv`.
+  `co2_3b_temp_moisture_CI.png` (with 95 % CI bands); data `data/soil_co2_by_pot_daily.csv`.
 - **Confounders handled explicitly:** sensor age (survivorship falls from ~20 to a handful;
   time-detrended correlations survive). Dry-soil noise is a non-issue for the leachate
   comparison — the soil is always wet when leachate is pumped.
