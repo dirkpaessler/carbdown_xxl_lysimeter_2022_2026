@@ -105,33 +105,47 @@ def main():
     fig.savefig(p1, bbox_inches="tight"); plt.close(fig)
 
     # ============ FIGURE 2: accumulated CDR, gross vs net (with/without tap water) ============
-    tg = (ts.groupby(["treatment_group_label", "date"])["TA_CO2cum_t_per_ha_avgBD"]
-          .mean().reset_index())
+    col = "TA_CO2cum_t_per_ha_avgBD"
     order = ["Control", "100 t/ha", "200 t/ha", "400 t/ha", "200 t/ha fine"]
+    # per-treatment stats across replicate pots: mean, 95% CI (n>=2), carried forward on the tail
+    stats = {}
+    for name in order:
+        g = (ts[ts["treatment_group_label"] == name]
+             .groupby("date")[col].agg(["mean", "std", "count"]).reset_index())
+        g = g.dropna(subset=["mean"]).sort_values("date").reset_index(drop=True)   # drop empty dates -> no line gaps
+        ci = np.where(g["count"] >= 2, 1.96 * g["std"] / np.sqrt(g["count"]), np.nan)
+        g["ci"] = pd.Series(ci).ffill().fillna(0.0).values          # carry last CI onto single-pot tail
+        stats[name] = g
     fig, (b0, b1) = plt.subplots(1, 2, figsize=(13.5, 5.4), sharey=True)
     for panel, net in ((b0, False), (b1, True)):
         for name in order:
-            g = tg[tg["treatment_group_label"] == name].sort_values("date")
-            y = g["TA_CO2cum_t_per_ha_avgBD"].values.astype(float)
-            if net:
-                y = y - g["date"].map(cum_input).values
-            panel.plot(g["date"], y, "-", color=TRSTYLE[name], lw=1.9, label=name)
+            g = stats[name]
+            shift = g["date"].map(cum_input).values if net else 0.0
+            m = g["mean"].values - shift
+            ci = g["ci"].values
+            n2 = g["count"].values >= 2
+            x = g["date"].values
+            panel.fill_between(x, m - ci, m + ci, where=n2, interpolate=True,
+                               color=TRSTYLE[name], alpha=0.15, lw=0)      # solid 95% CI (n>=4)
+            if (~n2).any():                                               # hatched carried-CI on single-pot tail
+                k = int(np.where(n2)[0].max())
+                panel.fill_between(x[k:], (m - ci)[k:], (m + ci)[k:], facecolor="none",
+                                   hatch="////", edgecolor=TRSTYLE[name], lw=0.0, alpha=0.45)
+            panel.plot(x, m, "-", color=TRSTYLE[name], lw=1.9, label=name)
         panel.axhline(0, color="#999", lw=0.8, ls=":")
     b0.set_title("As measured (gross export)", fontsize=12)
     b1.set_title("Minus irrigation water (net weathering)", fontsize=12)
     b0.set_ylabel("Cumulative bicarbonate export, tCO₂e/ha")
-    # shade the tap-water band on the gross panel
-    b0.fill_between(cum_input.index, 0, -cum_input.values * 0 + cum_input.values,
-                    color="#D55E00", alpha=0.0)  # placeholder (keep axes clean)
     b0.legend(frameon=False, fontsize=9, loc="upper left")
     fig.suptitle("Accumulated CDR with and without the tap-water blank — a common ~0.5 tCO₂e/ha "
                  "input (up to ~0.6 mass-balance ceiling) shifts every pot equally",
                  fontsize=13, weight="bold")
-    fig.text(0.5, 0.005, "Net = gross − cumulative tap-water alkalinity input. Mass-balance "
-             "ceiling 111 L/pot × 5.1 mmol/L HCO₃⁻ = 0.61 tCO₂e/ha (shown); conservatively "
-             "~0.5 allowing for HCO₃ uncertainty and minor retention. Common to every pot, so "
-             "it does NOT change treatment-vs-control (the dose result is unaffected). Net dips "
-             "below zero in summer 2022 while the soil still holds the input, then recovers.",
+    fig.text(0.5, 0.005, "Lines = treatment mean; shaded = 95 % CI across replicate pots (n ≤ 4); "
+             "hatched = last CI carried forward for the single pot that continues past the 2025 "
+             "refill. Net = gross − cumulative tap-water alkalinity input (mass-balance ceiling "
+             "111 L/pot × 5.1 mmol/L HCO₃⁻ = 0.61 tCO₂e/ha, shown; conservatively ~0.5). The blank "
+             "is common to every pot, so it does NOT change treatment-vs-control (the dose result "
+             "is unaffected). Net dips below zero in summer 2022 while the soil still holds the input.",
              ha="center", fontsize=8, color="#666")
     fig.tight_layout(rect=(0, 0.05, 1, 0.95))
     brand.add_logo(fig, ax=b1, loc="lower right", frac=0.13)
