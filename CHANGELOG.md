@@ -4,6 +4,15 @@ Public releases of the Fürth-2022 dataset. Newest first.
 
 ---
 
+## v1.0.1 — 2026-07-05 — Buried-EC finding reworded
+
+- Clarified the buried-EC result: soil-EC and soil moisture are read from the same Dragino
+  LSE01 prongs, so moisture is **not an independent confounder** of the EC reading. Removed
+  the moisture-controlled correlation uplift and `figures/story_4_moisture_confounder.png`.
+  The headline is now the raw 60 cm soil-EC ↔ leachate EC r ≈ 0.71 (Ca/Mg ≈ 0.70, TA ≈ 0.46;
+  30 cm r ≈ 0.39), which is unchanged by the 10 % dryness filter (only 3/355 leachate-paired
+  readings are dry). **No data values changed.**
+
 ## v1.0 — 2026-07-04 — First public release
 
 - First open release of the **XXL Lysimeter Experiment**, soil **"Fürth 2022"**: leachate

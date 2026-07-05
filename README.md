@@ -146,8 +146,10 @@ Full units, molar masses and provenance are in **`data/xxl_lysimeter_metadata.js
   weathering.
 - **Below detection limit:** values reported as `<x` are set to 0 (flagged `below_lod` in
   the long table).
-- **Sensor dryness filter:** buried EC/pH readings below **10 % VWC** are dropped (the
-  probes lose reliable contact with pore water and EC collapses).
+- **Sensor dryness filter:** in the weekly monitoring series, buried EC/pH readings below
+  **10 % VWC** are dropped (a very dry probe loses reliable contact with pore water). This
+  does not affect the soil-EC ↔ leachate correlations — the soil is wet whenever leachate is
+  pumped (only 3 of 355 paired readings are below 10 %).
 - **Validation:** this pipeline reproduces our original project notebook to a median
   relative error near zero (see `metadata.json`).
 
@@ -175,10 +177,12 @@ out-of-sample check — see `data/xxl_lysimeter_volume_strategy_plausibility.csv
   pot, so it does not change the dose comparison but lowers the absolute CDR (see §5).
   → `figures/water_irrigation_share_2022.png`, `figures/TA_cumulative_gross_vs_net_tapwater.png`.
 - **A buried EC sensor tracks leachate chemistry.** The 60 cm soil-EC probe correlates
-  with leachate EC/Ca/Mg at r ≈ 0.71 pooled (0.60–0.77 per treatment), rising to
-  **r ≈ 0.77** after controlling for soil moisture. **The 30 cm sensor barely works**
-  (0.39 → 0.55). → `figures/story_1_soilEC_predicts_leachateEC.png`,
-  `monitoring_soilEC_vs_leachateEC_by_treatment_depth.png`, `story_4_moisture_confounder.png`.
+  with leachate EC/Ca/Mg at **r ≈ 0.71** pooled (0.60–0.77 per treatment), and with
+  leachate TA at r ≈ 0.46. **The 30 cm sensor barely works** (r ≈ 0.39). Soil-EC and soil
+  moisture are read from the same LSE01 prongs, so moisture is not an independent confounder;
+  the correlation is unchanged whether or not dry readings are excluded (3/355 paired points
+  below 10 % moisture). → `figures/story_1_soilEC_predicts_leachateEC.png`,
+  `monitoring_soilEC_vs_leachateEC_by_treatment_depth.png`.
 - **The soil breathes.** Temperature → soil CO₂ (+0.58), soil CO₂ → leachate pH (−0.74),
   soil CO₂ → leachate TA (+0.58), pooled across doses; a seasonal weathering engine,
   consistent across doses.
@@ -186,9 +190,10 @@ out-of-sample check — see `data/xxl_lysimeter_volume_strategy_plausibility.csv
 - **A weathering fingerprint in soil CO₂?** 400 t/ha tends lowest (possible drawdown) but
   n = 1 sensor/treatment and sensors die → suggestive only.
   → `figures/story_5_soilCO2_by_treatment.png`.
-- **Confounders handled explicitly:** soil moisture (EC/pH unreliable < 10 % VWC), sensor
-  age (survivorship falls from ~20 to a handful; time-detrended correlations survive).
-  → `figures/story_4_moisture_confounder.png`, `monitoring_sensor_survivorship.png`.
+- **Confounders handled explicitly:** sensor age (survivorship falls from ~20 to a handful;
+  time-detrended correlations survive). Dry-soil noise is a non-issue for the leachate
+  comparison — the soil is always wet when leachate is pumped.
+  → `figures/monitoring_sensor_survivorship.png`.
 
 ## 8. Feedstock characterization
 
