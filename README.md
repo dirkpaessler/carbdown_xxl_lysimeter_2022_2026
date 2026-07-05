@@ -167,7 +167,8 @@ out-of-sample check — see `data/xxl_lysimeter_volume_strategy_plausibility.csv
   treatment differs significantly from control (per-window Welch, n = 4; whole-period mixed
   model). FINE trends highest (+6 % conc, +9 % export) but is not significant — and FINE is
   mineralogically a *different rock* (see §8).
-  → `figures/slide1_TA_export_headline.png`, `alt_FUERTH2022_alkalinity_cumflux.png`,
+  → `figures/TA_endpoint_by_treatment.png` (day-1,011 point plot with 95 % CI),
+  `figures/slide1_TA_export_headline.png`, `alt_FUERTH2022_alkalinity_cumflux.png`,
   `alt_FUERTH2022_significance_vs_control.png`, `slide2_mixedmodel_forest.png`.
 - **The irrigation-water blank.** In 2022 the pots were watered with ~111 L/pot of hard tap
   water (≈ 5.1 mmol/L HCO₃⁻) of order 0.5 tCO₂e/ha (up to ~0.6 ceiling), ~a third of gross — common to every
