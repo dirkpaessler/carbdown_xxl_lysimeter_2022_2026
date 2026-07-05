@@ -259,38 +259,38 @@ def main():
     paired = pd.DataFrame(rows)
     paired.to_csv(OUT / "monitoring_leachate_sensor_paired.csv", index=False)
 
-    # ============ FIGURE 1: soil EC sensor vs leachate EC, treatment × depth ======
+    # ===== FIGURE 1: soil-EC sensor vs leachate EC — all doses overlaid, per depth =====
     treatments = [t for t in ["000", "100", "200", "400", "FINE"]
                   if t in set(paired["treatment"])]
     depths = [("soil_ec_30cm", "30 cm"), ("soil_ec_60cm", "60 cm")]
-    fig, axes = plt.subplots(len(treatments), len(depths),
-                             figsize=(4.2 * len(depths), 2.7 * len(treatments)),
-                             squeeze=False)
     lea_ec = "EC_lab_uS_per_cm_25degC"
-    for i, tr in enumerate(treatments):
-        col, lab = TSTYLE[tr]
-        sub = paired[paired["treatment"] == tr]
-        for j, (sc, dlab) in enumerate(depths):
-            ax = axes[i][j]
-            g = sub.dropna(subset=[lea_ec, sc])
-            ax.scatter(g[lea_ec], g[sc], s=18, color=col, alpha=0.6, edgecolors="none")
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.9), sharex=True)
+    for j, (sc, dlab) in enumerate(depths):
+        ax = axes[j]
+        pooled = paired.dropna(subset=[lea_ec, sc])
+        y0 = 0.97
+        for tr in treatments:
+            col, lab = TSTYLE[tr]
+            g = paired[paired["treatment"] == tr].dropna(subset=[lea_ec, sc])
+            ax.scatter(g[lea_ec], g[sc], s=16, color=col, alpha=0.55, edgecolors="none")
             if len(g) >= 4:
-                r = np.corrcoef(g[lea_ec], g[sc])[0, 1]
                 b1, b0 = np.polyfit(g[lea_ec], g[sc], 1)
                 xs = np.array([g[lea_ec].min(), g[lea_ec].max()])
-                ax.plot(xs, b0 + b1 * xs, "-", color=col, lw=1.4)
-                ax.text(0.04, 0.9, f"r={r:+.2f}  n={len(g)}", transform=ax.transAxes,
-                        fontsize=8, va="top")
-            if j == 0:
-                ax.set_ylabel(f"{lab}\nsoil EC sensor")
-            if i == len(treatments) - 1:
-                ax.set_xlabel("Leachate EC (µS/cm)")
-            if i == 0:
-                ax.set_title(f"soil EC at {dlab}", fontsize=10)
-    fig.suptitle("XXL Lysimeter — in-situ soil EC sensor vs. leachate EC "
-                 "(by treatment × depth, old Fürth pots)", fontsize=12, y=1.0)
-    fig.tight_layout(rect=(0, 0, 1, 0.99))
-    _brand(fig, loc="lower right", frac=0.08)
+                ax.plot(xs, b0 + b1 * xs, "-", color=col, lw=1.6, alpha=0.9)
+                r = np.corrcoef(g[lea_ec], g[sc])[0, 1]
+                ax.text(0.035, y0, f"{lab}: r = {r:+.2f}", transform=ax.transAxes,
+                        va="top", fontsize=10, color=col, weight="bold")   # doubles as legend
+                y0 -= 0.082
+        rp = np.corrcoef(pooled[lea_ec], pooled[sc])[0, 1]
+        ax.set_title(f"soil EC at {dlab}   (all doses pooled: r = {rp:+.2f}, n = {len(pooled)})",
+                     fontsize=12.5)
+        ax.set_xlabel("Leachate EC (µS/cm)", fontsize=12)
+        ax.set_ylabel("In-situ soil EC sensor", fontsize=12)
+        ax.tick_params(labelsize=10.5)
+    fig.suptitle("In-situ soil-EC sensor vs. leachate EC — the 60 cm probe tracks, the 30 cm does not",
+                 fontsize=13.5, weight="bold")
+    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    _brand(fig, loc="lower right", frac=0.10)
     p1 = FIG / "monitoring_soilEC_vs_leachateEC_by_treatment_depth.png"
     fig.savefig(p1, bbox_inches="tight"); plt.close(fig)
 
