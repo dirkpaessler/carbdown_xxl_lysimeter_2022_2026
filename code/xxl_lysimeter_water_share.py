@@ -116,7 +116,7 @@ def main():
         ci = np.where(g["count"] >= 2, 1.96 * g["std"] / np.sqrt(g["count"]), np.nan)
         g["ci"] = pd.Series(ci).ffill().fillna(0.0).values          # carry last CI onto single-pot tail
         stats[name] = g
-    fig, (b0, b1) = plt.subplots(1, 2, figsize=(13.5, 5.4), sharey=True)
+    fig, (b0, b1) = plt.subplots(1, 2, figsize=(11, 6.2), sharey=True)
     for panel, net in ((b0, False), (b1, True)):
         for name in order:
             g = stats[name]
@@ -133,22 +133,26 @@ def main():
                                    hatch="////", edgecolor=TRSTYLE[name], lw=0.0, alpha=0.45)
             panel.plot(x, m, "-", color=TRSTYLE[name], lw=1.9, label=name)
         panel.axhline(0, color="#999", lw=0.8, ls=":")
-    b0.set_title("As measured (gross export)", fontsize=12)
-    b1.set_title("Minus irrigation water (net weathering)", fontsize=12)
+    b0.set_title("As measured (gross export)", fontsize=11)
+    b1.set_title("Minus irrigation water (net weathering)", fontsize=11)
     b0.set_ylabel("Cumulative bicarbonate export, tCO₂e/ha")
-    b0.legend(frameon=False, fontsize=9, loc="upper left")
-    fig.suptitle("Accumulated CDR with and without the tap-water blank — a common ~0.5 tCO₂e/ha "
-                 "input (up to ~0.6 mass-balance ceiling) shifts every pot equally",
-                 fontsize=13, weight="bold")
-    fig.text(0.5, 0.005, "Lines = treatment mean; shaded = 95 % CI across replicate pots (n ≤ 4); "
-             "hatched = last CI carried forward for the single pot that continues past the 2025 "
-             "refill. Net = gross − cumulative tap-water alkalinity input (mass-balance ceiling "
-             "111 L/pot × 5.1 mmol/L HCO₃⁻ = 0.61 tCO₂e/ha, shown; conservatively ~0.5). The blank "
-             "is common to every pot, so it does NOT change treatment-vs-control (the dose result "
-             "is unaffected). Net dips below zero in summer 2022 while the soil still holds the input.",
-             ha="center", fontsize=8, color="#666")
-    fig.tight_layout(rect=(0, 0.05, 1, 0.95))
-    brand.add_logo(fig, ax=b1, loc="lower right", frac=0.13)
+    b0.legend(frameon=False, fontsize=8.5, loc="upper left")
+    fig.suptitle("In the first summer, alkalinity from irrigation and the Birch effect "
+                 "dominated the alkalinity export", fontsize=13.5, weight="bold", y=0.995)
+    fig.text(0.5, 0.945, "Afterwards only rainwater entered the experiment",
+             ha="center", fontsize=10.5, color="#555")
+    import textwrap
+    foot = ("Accumulated bicarbonate export per treatment, as measured (gross) vs minus the "
+            "tap-water blank. That blank — a common ~0.5 tCO₂e/ha (up to ~0.6 mass-balance "
+            "ceiling; 111 L/pot × 5.1 mmol/L HCO₃⁻), all in by Aug 2022 — is identical for every "
+            "pot, so it does not change treatment-vs-control (the dose result is unaffected). "
+            "Shaded: 95 % CI across replicate pots (n ≤ 4); hatched: last CI carried forward for "
+            "the single pot continuing past the 2025 refill. Net dips below zero in summer 2022 "
+            "while the soil still holds the input, then recovers as it flushes. Volume model avgBD.")
+    fig.text(0.5, 0.015, "\n".join(textwrap.wrap(foot, 118)), ha="center", va="bottom",
+             fontsize=7.5, color="#666")
+    fig.tight_layout(rect=(0, 0.14, 1, 0.92))
+    brand.add_logo(fig, ax=b1, loc="lower right", frac=0.12)
     p2 = FIG / "TA_cumulative_gross_vs_net_tapwater.png"
     fig.savefig(p2, bbox_inches="tight"); plt.close(fig)
 
