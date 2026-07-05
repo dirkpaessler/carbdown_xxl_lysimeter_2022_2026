@@ -208,14 +208,39 @@ def main():
     # ===== FIGURE 4: moisture confounder (redesigned) ========================
     fig, (a0, a1) = plt.subplots(1, 2, figsize=(12.5, 5.2),
                                  gridspec_kw=dict(width_ratios=[1.55, 1]))
-    g = potsens.dropna(subset=["soil_ec_60cm", "soil_moisture_60cm_pct"])
-    xm = g["soil_moisture_60cm_pct"].to_numpy(); ym = g["soil_ec_60cm"].to_numpy()
-    xlo, xhi = 4.0, np.ceil(xm.max()) + 0.5
+    # RAW sensor data (NOT the 10 %-dryness-filtered weekly series) so we can show the
+    # sub-10 % readings where the buried probe loses contact and EC collapses.
+    import re as _re
+
+    def _raw60(fname, lo=None, hi=None):
+        df = pd.read_excel(MON / fname); df.columns = [str(c).strip() for c in df.columns]
+        df["date"] = pd.to_datetime(df["Zeitstempel"], errors="coerce").dt.normalize()
+        cols = [c for c in df.columns if c.startswith("EC.60")]
+        m = df.melt("date", value_vars=cols, var_name="col", value_name="v").dropna(subset=["v"])
+        m["v"] = pd.to_numeric(m["v"], errors="coerce")
+        if lo is not None:
+            m = m[m["v"] >= lo]
+        if hi is not None:
+            m = m[m["v"] <= hi]
+
+        def _pot(c):
+            mm = _re.search(r"\((?:was|aka)\s*(\d{3}\.[A-E])\)", c) or _re.search(r"(\d{3}\.[A-E])", c)
+            return mm.group(1) if mm else None
+        m["pot"] = m["col"].map(_pot)
+        return m.dropna(subset=["pot"]).groupby(["date", "pot"])["v"].mean()
+
+    gg = pd.concat([_raw60("soil_moisture_60cm.xlsx", lo=2.5).rename("moist"),
+                    _raw60("soil_ec_60cm.xlsx", lo=1, hi=2000).rename("ec")], axis=1).dropna()
+    xm = gg["moist"].to_numpy(); ym = gg["ec"].to_numpy()
+    dry = xm < 10
+    xlo, xhi = 2.0, np.ceil(xm.max()) + 0.5
     a0.set_xlim(xlo, xhi)
     a0.axvspan(xlo, 10, color=OK["verm"], alpha=0.09, lw=0)
-    a0.scatter(xm, ym, s=13, color=OK["blue"], alpha=0.40, edgecolors="none",
-               label="soil-EC readings (≥ 10 % VWC)")
-    edges = np.arange(np.floor(xm.min()), np.ceil(xm.max()) + 2, 2.0)         # median-EC trend
+    a0.scatter(xm[dry], ym[dry], s=15, color="#b0b0b0", alpha=0.65, edgecolors="none",
+               label=f"dropped (< 10 %, n = {int(dry.sum())})")
+    a0.scatter(xm[~dry], ym[~dry], s=13, color=OK["blue"], alpha=0.38, edgecolors="none",
+               label="used (≥ 10 %)")
+    edges = np.arange(2, np.ceil(xm.max()) + 2, 2.0)                          # median-EC trend
     bx, by = [], []
     for lo, hi in zip(edges[:-1], edges[1:]):
         m = (xm >= lo) & (xm < hi)
@@ -223,11 +248,14 @@ def main():
             bx.append((lo + hi) / 2); by.append(np.median(ym[m]))
     a0.plot(bx, by, "-o", color="#111111", lw=2.4, ms=4, zorder=6, label="median EC")
     a0.axvline(10, color=OK["verm"], ls="--", lw=1.6)
-    a0.text(7.0, float(np.nanmax(ym)) * 0.5, "< 10 % VWC\nprobe loses\ncontact →\ndropped",
-            ha="center", va="center", fontsize=8.5, color=OK["verm"])
-    a0.set_xlabel("Soil moisture at 60 cm (% VWC)")
+    a0.annotate("below 10 % the probe loses pore-water\ncontact and EC collapses → dropped",
+                xy=(6, float(np.median(ym[(xm >= 4) & (xm < 8)]))),
+                xytext=(0.33, 0.88), textcoords="axes fraction",
+                fontsize=9, color=OK["verm"], ha="left", va="top",
+                arrowprops=dict(arrowstyle="->", color=OK["verm"], lw=1.3))
+    a0.set_xlabel("Soil moisture at 60 cm (%)")
     a0.set_ylabel("Soil EC sensor at 60 cm (µS/cm)")
-    a0.set_title("Bulk soil-EC climbs with moisture — a confounder to remove", fontsize=11.5)
+    a0.set_title("Dry soil breaks the sensor: EC collapses below 10 % moisture", fontsize=11.5)
     a0.legend(frameon=False, fontsize=8.5, loc="lower right")
 
     # ---- right: raw → moisture-controlled r as a dumbbell ----
