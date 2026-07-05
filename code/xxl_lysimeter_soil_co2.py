@@ -247,20 +247,18 @@ def main():
     fig.savefig(FIG / "co2_4_engine_not_meter.png", bbox_inches="tight")
     plt.close(fig)
 
-    # ============ FIGURE 5: a repeated Birch effect (rewetting) =====================
-    # Align soil CO2 (daily) and soil EC (weekly) at each deep dry->wet transition.
+    # ============ FIGURE 5: a repeated Birch effect (one drought-to-drought cycle) ==
+    # Align soil CO2 (daily) and soil EC (weekly) at each deep dry->wet transition and run
+    # each curve to the NEXT rewetting (marker v) — one full cycle per event. The 2025 event
+    # has no CO2 (sensors gone) but still shows in EC.
     ec = _site_weekly("soil_ec_60cm.xlsx", "EC.60", 1, 2000)
-    co2day = co2.groupby("date")["soil_co2_ppm"].median().sort_index()
     mser = moday.sort_index(); mv = mser.values; md = mser.index
     evs = []
-    for i in range(1, len(mv) - 1):                       # deep moisture minima that rewet
+    for i in range(1, len(mv) - 1):                       # all deep moisture minima that rewet
         if mv[i] <= mv[i - 1] and mv[i] < mv[i + 1] and mv[i] < 16:
             fwd = mser[(md > md[i]) & (md <= md[i] + pd.Timedelta(days=28))]
             if len(fwd) and fwd.max() - mv[i] >= 6:
-                n = ((co2day.index >= md[i] - pd.Timedelta(days=21)) &
-                     (co2day.index <= md[i] + pd.Timedelta(days=42))).sum()
-                if n > 10:                                # needs CO2 coverage (2025 event has none)
-                    evs.append((md[i], mv[i]))
+                evs.append((md[i], float(mv[i])))
     pr = []                                               # prune events closer than 30 days
     for e in sorted(evs):
         if pr and (e[0] - pr[-1][0]).days < 30:
@@ -269,32 +267,46 @@ def main():
         else:
             pr.append(e)
     ecolors = [OK["orange"], OK["verm"], OK["blue"], OK["green"], OK["purple"]]
-    W0, W1 = -42, 105
-    fig, (b0, b1) = plt.subplots(1, 2, figsize=(13.5, 5.4))
+    tmax = ec.index.max()                                 # last event runs to the data end
+    smooth = lambda s: s.rolling(11, center=True, min_periods=3).mean()
+    fig, (b0, b1) = plt.subplots(1, 2, figsize=(14.5, 5.4))
     for k, (t0, mn) in enumerate(pr):
         c = ecolors[k % len(ecolors)]
+        W1 = (pr[k + 1][0] - t0).days if k + 1 < len(pr) else (tmax - t0).days
         post = tday[(tday.index >= t0) & (tday.index <= t0 + pd.Timedelta(days=14))].mean()
-        lab = f"{t0.strftime('%Y-%m')}: {mn:.0f}% dry, {post:.0f}°C after"
-        sub = co2[(co2.date >= t0 + pd.Timedelta(days=W0)) & (co2.date <= t0 + pd.Timedelta(days=W1))].copy()
+        sub = co2[(co2.date >= t0 - pd.Timedelta(days=42)) & (co2.date <= t0 + pd.Timedelta(days=W1))].copy()
         sub["rel"] = (sub.date - t0).dt.days
-        g = sub.groupby("rel")["soil_co2_ppm"]; med = g.median(); q1 = g.quantile(.25); q3 = g.quantile(.75)
-        b0.fill_between(med.index, q1.values, q3.values, color=c, alpha=0.13, lw=0)
-        b0.plot(med.index, med.rolling(5, center=True, min_periods=2).median().values, color=c, lw=2.4, label=lab)
-        we = ec[(ec.index >= t0 + pd.Timedelta(days=W0)) & (ec.index <= t0 + pd.Timedelta(days=W1))]
-        b1.plot((we.index - t0).days, we.values, "-o", color=c, lw=2.2, ms=4, label=lab)
+        has_co2 = int(sub["rel"].between(0, 42).sum()) > 10
+        lab = f"{t0.strftime('%Y-%m')}: {mn:.0f}% dry, {post:.0f}°C after" + ("" if has_co2 else "  (EC only)")
+        if has_co2:
+            g = sub.groupby("rel")["soil_co2_ppm"]
+            med = smooth(g.median()).dropna()
+            b0.fill_between(g.median().index, smooth(g.quantile(.25)).values,
+                            smooth(g.quantile(.75)).values, color=c, alpha=0.11, lw=0)
+            b0.plot(med.index, med.values, "-", color=c, lw=2.4, label=lab)
+            if len(med):
+                b0.plot(med.index[-1], med.values[-1], "v", color=c, ms=10, zorder=7)
+        we = ec[(ec.index >= t0 - pd.Timedelta(days=42)) & (ec.index <= t0 + pd.Timedelta(days=W1))]
+        rel = (we.index - t0).days
+        b1.plot(rel, we.values, "-o" if has_co2 else "--s", color=c, lw=2.0, ms=3.5, label=lab)
+        if len(we):
+            b1.plot(rel[-1], we.values[-1], "v", color=c, ms=10, zorder=7)
     for ax in (b0, b1):
         ax.axvline(0, color="#444", ls="--", lw=1.4)
-        ax.axvspan(W0, 0, color=OK["grey"], alpha=0.07, lw=0)
+        ax.axvspan(-42, 0, color=OK["grey"], alpha=0.07, lw=0)
+        for x in (90, 180, 270):
+            ax.axvline(x, color="#ededed", lw=1, zorder=0)
     b0.set_ylim(0, 10000)
     b0.set_ylabel("Soil CO₂ (ppm) — median + IQR across pots")
     b0.set_xlabel("days from rewetting (soil-moisture minimum)")
-    b0.set_title("Respiration burst: CO₂ jumps on rewetting (big when warm)")
+    b0.set_title("CO₂: one full drought-to-drought cycle  (▼ = next rewetting)")
     b0.legend(frameon=False, fontsize=8, loc="upper right")
     b1.set_ylabel("Soil EC at 60 cm (µS/cm), weekly")
     b1.set_xlabel("days from rewetting (soil-moisture minimum)")
-    b1.set_title("Salt flush: EC rises on every rewetting")
-    b1.legend(frameon=False, fontsize=8, loc="upper left")
-    fig.suptitle("A repeated Birch effect: rewetting dry soil sets off a respiration burst (CO₂) and a salt flush (EC)",
+    b1.set_title("Salt flush: EC rises on every rewetting  (▼ = next rewetting)")
+    b1.legend(frameon=False, fontsize=7.6, loc="upper right")
+    fig.suptitle("A repeated Birch effect: each rewetting shapes the whole cycle until the next drought "
+                 "— CO₂ burst (when warm) and EC salt flush (every time)",
                  fontsize=12, weight="bold")
     fig.tight_layout(rect=(0, 0, 1, 0.95))
     brand.add_logo(fig, ax=b1, loc="lower right", frac=0.12)
