@@ -30,9 +30,9 @@ lysimeter pots at our Fürth site.
   leachate (*Sickerwasser*) for **total alkalinity (TA, as HCO₃⁻)** — our CO₂-drawdown
   proxy — plus major ions, pH and electrical conductivity.
 - Each instrumented pot carries **buried sensors** for soil moisture, temperature,
-  electrical conductivity (EC) and pH at 30 and 60 cm; the four A-pots also carry a
-  **soil-CO₂** sensor at ~20 cm. On-site rain gauges and ambient-CO₂ sensors complete the
-  picture.
+  electrical conductivity (EC) and pH at 30 and 60 cm; **every pot** also carries a
+  **soil-CO₂** sensor at ~20 cm (20 in all). On-site rain gauges and ambient-CO₂ sensors
+  complete the picture.
 
 The headline quantity is the **cumulative CO₂-equivalent export** in t CO₂/ha, computed
 from measured bicarbonate export.
@@ -50,9 +50,10 @@ The leachate/TA tables are cleanly separated by soil, so they contain Fürth-202
 throughout. For the buried **soil-sensor** series we keep, after `2025-05-15`, **only
 these five continuing pots** (readings from the repurposed pots are removed). Soil
 temperature is reported at the site level and could not be attributed to individual pots,
-so the temperature series **ends at** `2025-05-15`; soil CO₂ comes only from the four
-continuing A-pots and runs the full length. All other sensor products (EC, pH, moisture)
-run to the end of 2025 for the continuing pots.
+so the temperature series **ends at** `2025-05-15`. The per-pot soil-CO₂ record
+(`data/soil_co2_by_pot_daily.csv`, one sensor in each of the 20 pots) runs each sensor's
+full life, with sensors failing progressively through 2023–2025. All other sensor products
+(EC, pH, moisture) run to the end of 2025 for the continuing pots.
 
 ## 3. Repository layout
 
@@ -123,6 +124,13 @@ month) are derived from it.
 pot and as a site mean (`soil_moisture_*`, `soil_temp_30cm_C`, `soil_ec_*`, `soil_ph_*`,
 `soil_co2_ppm`, `tank_air_co2_ppm`, `ambient_co2_ppm`).
 
+**`data/soil_co2_by_pot_daily.csv`** — daily soil-CO₂ (ppm) for the buried ~20 cm sensor in
+**each of the 20 pots** (`date`, `treatment`, `pot_id`, `sensor_serial`, `soil_co2_ppm`);
+0, sub-400 (sub-atmospheric) and >40,000 ppm readings removed, control de-duplicated. Raw
+per-pot exports in `monitoring/soil_co2_by_pot_raw/`. Rebuild figures with
+`code/xxl_lysimeter_soil_co2.py`. The tank/"MIXED" sensor (a fourth FINE pot) is split out to
+`data/tank_co2_daily_mixed.csv`.
+
 **`weather/weather_daily_combined.csv`** — daily `rain_onsite_mm` / `rain_official_mm`
 (DWD 03668) and `temp_onsite_C` / `temp_official_C`.
 
@@ -183,13 +191,18 @@ out-of-sample check — see `data/xxl_lysimeter_volume_strategy_plausibility.csv
   the correlation is unchanged whether or not dry readings are excluded (3/355 paired points
   below 10 % moisture). → `figures/story_1_soilEC_predicts_leachateEC.png`,
   `monitoring_soilEC_vs_leachateEC_by_treatment_depth.png`.
-- **The soil breathes.** Temperature → soil CO₂ (+0.58), soil CO₂ → leachate pH (−0.74),
-  soil CO₂ → leachate TA (+0.58), pooled across doses; a seasonal weathering engine,
-  consistent across doses.
-  → `figures/story_2_weathering_mechanism_chain.png`, `story_2b_*`, `story_3_seasonal_breathing.png`.
-- **A weathering fingerprint in soil CO₂?** 400 t/ha tends lowest (possible drawdown) but
-  n = 1 sensor/treatment and sensors die → suggestive only.
-  → `figures/story_5_soilCO2_by_treatment.png`.
+- **The soil breathes.** Temperature → soil CO₂, soil CO₂ → leachate pH, soil CO₂ → leachate
+  TA; a seasonal weathering engine, consistent across doses. Site-level chain (+0.58 / −0.74 /
+  +0.58); with a sensor now in every pot, confirmed per-pot (+0.78 / −0.68 / +0.36).
+  → `figures/story_2_weathering_mechanism_chain.png`, `story_3_seasonal_breathing.png`,
+  `co2_1_seasonal_breathing_by_dose.png`.
+- **Soil CO₂: the weathering engine, not a carbon meter.** With one soil-CO₂ sensor in *every*
+  pot (n = 4/dose), the dose still does not separate (400 t/ha ~13 % low but n.s.). CO₂ drives
+  leachate acidity strongly (pH r = −0.68) but meters alkalinity only weakly (TA r = +0.36,
+  vs EC ↔ TA +0.63). CO₂ climbs with temperature then **reverses above ~18 °C** as the soil
+  dries and microbes go dormant — a temperature × moisture limit.
+  → `figures/co2_2_dose_forest.png`, `co2_4_engine_not_meter.png`,
+  `co2_3_temp_moisture_engine.png`; data `data/soil_co2_by_pot_daily.csv`.
 - **Confounders handled explicitly:** sensor age (survivorship falls from ~20 to a handful;
   time-detrended correlations survive). Dry-soil noise is a non-issue for the leachate
   comparison — the soil is always wet when leachate is pumped.
@@ -218,7 +231,7 @@ in our main experiment repository and is not needed to consume this dataset.
 2. *Does more basalt mean more CO₂ removal? What 1400 days actually show.*
 3. *The soil breathes: how temperature and CO₂ drive the weathering signal.*
 4. *Can a buried EC sensor stand in for lab alkalinity? In-situ EC as a continuous MRV proxy.*
-5. *Chasing a weathering fingerprint in soil CO₂ — and why one sensor per pot isn't enough.*
+5. *Can soil CO₂ measure carbon removal? A deep dive into the gas in the ground.*
 6. *Four years of buried sensors: rainfall, ambient data and sensor survivorship.*
 
 *(Article 1 published; parts 2–6 in preparation — links added on publication.)*
