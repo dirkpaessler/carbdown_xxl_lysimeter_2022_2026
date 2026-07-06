@@ -269,10 +269,26 @@ def main():
     ecolors = [OK["orange"], OK["verm"], OK["blue"], OK["green"], OK["purple"]]
     tmax = ec.index.max()                                 # last event runs to the data end
     smooth = lambda s: s.rolling(11, center=True, min_periods=3).mean()
+
+    def _tmin_rel(t0, W1):                                # winter temperature minimum -> spring
+        w = tday[(tday.index >= t0) & (tday.index <= t0 + pd.Timedelta(days=W1))]
+        return int((w.idxmin() - t0).days) if len(w) >= 5 else None
+
+    def _split(ax, x, y, c, sp, lw):                     # solid to sp, dashed after (next warm season)
+        x = np.asarray(x, float); y = np.asarray(y, float)
+        if sp is None:
+            ax.plot(x, y, "-", color=c, lw=lw); return
+        s = x <= sp
+        ax.plot(x[s], y[s], "-", color=c, lw=lw)
+        d = x >= sp
+        if d.sum() > 1:
+            ax.plot(x[d], y[d], "--", color=c, lw=lw, alpha=0.85)
+
     fig, (b0, b1) = plt.subplots(1, 2, figsize=(14.5, 5.4))
     for k, (t0, mn) in enumerate(pr):
         c = ecolors[k % len(ecolors)]
         W1 = (pr[k + 1][0] - t0).days if k + 1 < len(pr) else (tmax - t0).days
+        sp = _tmin_rel(t0, W1)
         post = tday[(tday.index >= t0) & (tday.index <= t0 + pd.Timedelta(days=14))].mean()
         sub = co2[(co2.date >= t0 - pd.Timedelta(days=42)) & (co2.date <= t0 + pd.Timedelta(days=W1))].copy()
         sub["rel"] = (sub.date - t0).dt.days
@@ -282,29 +298,33 @@ def main():
             g = sub.groupby("rel")["soil_co2_ppm"]
             med = smooth(g.median()).dropna()
             b0.fill_between(g.median().index, smooth(g.quantile(.25)).values,
-                            smooth(g.quantile(.75)).values, color=c, alpha=0.11, lw=0)
-            b0.plot(med.index, med.values, "-", color=c, lw=2.4, label=lab)
+                            smooth(g.quantile(.75)).values, color=c, alpha=0.10, lw=0)
+            _split(b0, med.index, med.values, c, sp, 2.4)
             if len(med):
                 b0.plot(med.index[-1], med.values[-1], "v", color=c, ms=10, zorder=7)
+            b0.plot([], [], "-", color=c, label=lab)
         we = ec[(ec.index >= t0 - pd.Timedelta(days=42)) & (ec.index <= t0 + pd.Timedelta(days=W1))]
         rel = (we.index - t0).days
-        b1.plot(rel, we.values, "-o" if has_co2 else "--s", color=c, lw=2.0, ms=3.5, label=lab)
+        _split(b1, rel, we.values, c, sp, 2.0)           # no markers so the dashes are visible
         if len(we):
             b1.plot(rel[-1], we.values[-1], "v", color=c, ms=10, zorder=7)
+        b1.plot([], [], "-", color=c, label=lab)
     for ax in (b0, b1):
         ax.axvline(0, color="#444", ls="--", lw=1.4)
         ax.axvspan(-42, 0, color=OK["grey"], alpha=0.07, lw=0)
         for x in (90, 180, 270):
             ax.axvline(x, color="#ededed", lw=1, zorder=0)
+    b0.plot([], [], "-", color="#555", label="solid: this event’s response")
+    b0.plot([], [], "--", color="#555", label="dashed: next warm season")
     b0.set_ylim(0, 10000)
     b0.set_ylabel("Soil CO₂ (ppm) — median + IQR across pots")
     b0.set_xlabel("days from rewetting (soil-moisture minimum)")
-    b0.set_title("CO₂: one full drought-to-drought cycle  (▼ = next rewetting)")
-    b0.legend(frameon=False, fontsize=8, loc="upper right")
+    b0.set_title("CO₂: one drought-to-drought cycle  (▼ = next rewetting; dashed = next warm season)")
+    b0.legend(frameon=False, fontsize=7.5, loc="upper right")
     b1.set_ylabel("Soil EC at 60 cm (µS/cm), weekly")
     b1.set_xlabel("days from rewetting (soil-moisture minimum)")
     b1.set_title("Salt flush: EC rises on every rewetting  (▼ = next rewetting)")
-    b1.legend(frameon=False, fontsize=7.6, loc="upper right")
+    b1.legend(frameon=False, fontsize=7.5, loc="upper right")
     fig.suptitle("A repeated Birch effect: each rewetting shapes the whole cycle until the next drought "
                  "— CO₂ burst (when warm) and EC salt flush (every time)",
                  fontsize=12, weight="bold")
