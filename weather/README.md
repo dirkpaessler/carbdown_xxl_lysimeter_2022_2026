@@ -53,5 +53,4 @@ intervals. Both are provided so the downstream can choose.
 
 - Earlier on-site tipping-bucket weekly export: "Rain Total" counter was non-monotonic
   and under-caught ~3× — discarded.
-- Wunderground PWS **IFRTH236 "Farrnbachtal 2"** (~100 m): offline, history behind
-  JavaScript, does not reach back to 2022 — not used.
+

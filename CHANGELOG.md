@@ -4,6 +4,13 @@ Public releases of the Fürth-2022 dataset. Newest first.
 
 ---
 
+## v1.3 — 2026-07-06 — Soil-CO₂ survivorship corrected
+- **IMPACT — `data/monitoring_sensor_survivorship.csv` and
+  `figures/monitoring_sensor_survivorship.png` corrected.** The soil-CO₂ channel now counts the
+  **20 per-pot sensors** (`data/soil_co2_by_pot_daily.csv`) instead of the legacy 4-channel
+  source. Column header `soil_co2 (of 4)` → `soil_co2 (of 20)`; the CO₂ curve now peaks at 20
+  (Oct 2022) and falls to a single survivor by early 2025. **No leachate/TA/flux values changed.**
+
 ## v1.2 — 2026-07-05 — Educational article 5; a repeated Birch effect
 - Added `figures/co2_5_birch_rewetting.png`: aligning daily soil CO₂ at each deep dry→wet
   transition reveals a **repeated Birch effect** — a respiration burst on rewetting (large in
@@ -64,6 +71,3 @@ Public releases of the Fürth-2022 dataset. Newest first.
   figures (`water_irrigation_share_2022.png`, `TA_cumulative_gross_vs_net_tapwater.png`) and
   the script that makes them (`code/xxl_lysimeter_water_share.py`).
 - Released under **CC-BY-4.0**.
-
-Supersedes the earlier *"XXL Lysimeter Experiment (started 2022) — Environmental data
-2022–2024"* folder in `dirkpaessler/carbdown`.
