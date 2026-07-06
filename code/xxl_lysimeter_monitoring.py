@@ -56,9 +56,6 @@ SENSORS = {
     "soil_ph_30cm":           ("soil_ph_30cm.xlsx", "pH.30", None, 3, 12),
     "soil_ph_60cm":           ("soil_ph_60cm.xlsx", "pH.60", None, 3, 12),
 }
-# Below this volumetric water content the bulk-EC and pH sensors lose reliable
-# contact with pore water (EC collapses ~3-10x); such readings are dropped.
-DRY_THRESHOLD_VWC = 10.0
 
 CO2_FILE = "co2_concentrations.xlsx"
 CO2_GROUPS = {
@@ -118,15 +115,10 @@ def load_sensors_pot_level(variants):
     out = None
     for name, d in frames.items():
         out = d if out is None else out.merge(d, on=["date", "pot"], how="outer")
-    # Confounder: mask EC/pH readings taken in soil too dry for the sensor to work.
-    for depth in ("30cm", "60cm"):
-        sm = f"soil_moisture_{depth}_pct"
-        if sm not in out:
-            continue
-        dry = out[sm] < DRY_THRESHOLD_VWC
-        for q in (f"soil_ec_{depth}", f"soil_ph_{depth}"):
-            if q in out:
-                out.loc[dry, q] = np.nan
+    # No dryness filter: the LSE01 reads EC and moisture from the same prongs and already
+    # temperature/conductivity-compensates the EC, so moisture is not an independent variable
+    # to correct or gate on. (Dry readings are immaterial anyway — the soil is wet whenever
+    # leachate is pumped: only 3 of 355 paired readings sit below 10 % VWC.)
     return out.sort_values(["pot", "date"]).reset_index(drop=True)
 
 
@@ -180,13 +172,24 @@ def sensor_survivorship(plt):
         m["v"] = pd.to_numeric(m["v"], errors="coerce")
         m = m[(m["v"] >= lo) & (m["v"] <= (hi if hi else 1e12))]
         counts[f"{name} (of {len(cols)})"] = m.groupby("q")["ch"].nunique()
-    # CO2 soil sensors
-    df = pd.read_excel(MON / CO2_FILE); df.columns = [str(c).strip() for c in df.columns]
-    df["q"] = pd.to_datetime(df["Zeitstempel"], errors="coerce").dt.to_period("M")
-    chans = ["SoilCO2.000.A", "SoilCO2.100.A", "SoilCO2.200.A", "SoilCO2.400.A"]
-    m = df.melt("q", value_vars=chans, var_name="ch", value_name="v").dropna(subset=["v"])
-    m["v"] = pd.to_numeric(m["v"], errors="coerce"); m = m[(m["v"] >= 1) & (m["v"] <= 40000)]
-    counts["soil_co2 (of 4)"] = m.groupby("q")["ch"].nunique()
+    # CO2 soil sensors — one per pot (20 total). Count from the per-pot daily export
+    # (soil_co2_by_pot_daily.csv, built by xxl_lysimeter_soil_co2.py); the old
+    # co2_concentrations.xlsx held only the 4 first-installed A-pot channels.
+    co2_daily = OUT / "soil_co2_by_pot_daily.csv"
+    if co2_daily.exists():
+        cp = pd.read_csv(co2_daily, parse_dates=["date"])
+        cp["q"] = cp["date"].dt.to_period("M")
+        cp["v"] = pd.to_numeric(cp["soil_co2_ppm"], errors="coerce")
+        cp = cp[(cp["v"] >= 1) & (cp["v"] <= 40000)]
+        n_pots = cp["pot_id"].nunique()
+        counts[f"soil_co2 (of {n_pots})"] = cp.groupby("q")["pot_id"].nunique()
+    else:  # fallback: legacy 4-channel source
+        df = pd.read_excel(MON / CO2_FILE); df.columns = [str(c).strip() for c in df.columns]
+        df["q"] = pd.to_datetime(df["Zeitstempel"], errors="coerce").dt.to_period("M")
+        chans = ["SoilCO2.000.A", "SoilCO2.100.A", "SoilCO2.200.A", "SoilCO2.400.A"]
+        m = df.melt("q", value_vars=chans, var_name="ch", value_name="v").dropna(subset=["v"])
+        m["v"] = pd.to_numeric(m["v"], errors="coerce"); m = m[(m["v"] >= 1) & (m["v"] <= 40000)]
+        counts["soil_co2 (of 4)"] = m.groupby("q")["ch"].nunique()
     surv = pd.DataFrame(counts)
     surv.index = surv.index.to_timestamp()
     surv.to_csv(OUT / "monitoring_sensor_survivorship.csv")
@@ -320,9 +323,9 @@ def main():
     fig.colorbar(im, fraction=0.02, pad=0.02).set_label("Pearson r", fontsize=8)
     ax.set_title("XXL Lysimeter — leachate vs. in-situ sensors, POT-WISE "
                  "(each pot's own sensor; pooled, old Fürth pots)", fontsize=11)
-    fig.text(0.5, 0.005, f"Soil EC/pH dryness-filtered (moisture ≥ {DRY_THRESHOLD_VWC:.0f}% VWC). "
-             "Controlling for moisture (partial r) keeps soil-EC↔leachate-EC even stronger — "
-             "see monitoring_partialcorr_moisture_controlled.csv. Grey = too few points.",
+    fig.text(0.5, 0.005, "Each pot paired with its own buried sensor; pooled over the old "
+             "Fürth pots. No dryness filter — the LSE01 shares prongs for EC/moisture and "
+             "compensates EC internally. Grey = too few points.",
              ha="center", fontsize=7.3, color="#666")
     fig.tight_layout(rect=(0, 0.03, 1, 1))
     _brand(fig, loc="lower right", frac=0.10)
@@ -335,7 +338,7 @@ def main():
     long["abs_r"] = long["r"].abs()
     long = long.sort_values("abs_r", ascending=False)
     long.to_csv(OUT / "monitoring_correlation_ranked.csv", index=False)
-    print("Top correlations (pot-wise, EC/pH dryness-filtered):")
+    print("Top correlations (pot-wise):")
     for _, r in long.head(12).iterrows():
         print(f"  {r['leachate']:12s} ↔ {r['sensor']:22s}  r={r['r']:+.2f}")
 

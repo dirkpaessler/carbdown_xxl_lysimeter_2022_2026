@@ -86,7 +86,7 @@ def main():
                  fontsize=12.5)
     ax.legend(frameon=False, fontsize=9, title="", loc="lower right")
     ax.text(0.5, -0.16, "Continuous, buried EC sensor → candidate proxy for leachate chemistry "
-            "between samplings (for MRV). Pot-wise; stronger still after controlling for soil moisture.",
+            "between samplings (for MRV). Pooled across all pots; tracks leachate EC in every dose.",
             transform=ax.transAxes, ha="center", fontsize=8, color="#666")
     fig.tight_layout(rect=(0, 0.03, 1, 1))
     brand.add_logo(fig, loc="upper right", frac=0.13)

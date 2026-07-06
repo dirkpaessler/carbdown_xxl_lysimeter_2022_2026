@@ -4,6 +4,21 @@ Public releases of the Fürth-2022 dataset. Newest first.
 
 ---
 
+## v1.4 — 2026-07-06 — Dryness filter removed; figures pruned; instrumentation documented
+- **IMPACT — no dryness filter on EC/pH.** The monitoring code no longer drops readings below
+  10 % VWC (the LSE01 shares prongs for EC/moisture and compensates EC internally, so moisture is
+  not an independent variable). Pooled 60 cm soil-EC ↔ leachate EC **0.71 → 0.70** (n 353 → 355),
+  TA 0.46 → 0.45; the monitoring correlation CSVs, weekly sensor exports and `story_1` /
+  `monitoring_soilEC_*` figures were regenerated. **No TA/flux values changed.**
+- **`figures/` pruned 29 → 19:** removed 10 PNGs referenced by neither the articles nor this
+  README (retired `story_5`/`story_2b`, old `monitoring_leachate_sensor_correlation*` pair,
+  `ph_histogram`, unused `alt_FUERTH2022_*` variants).
+- **`co2_1_seasonal_breathing_by_dose.png`** rebuilt with a 30-day rolling median (smoother) and a
+  higher y-axis so summer peaks are not clipped.
+- **README:** added an **Instrumentation (hardware)** table (Dragino LSE01/LSPH01, Seeed soil-CO₂
+  + SenseCAP S2103, Milesight EM500-CO2; gauges/gateway/cameras TBC); removed blog-series
+  references and the stale dryness-filter note; removed the defunct Wunderground mention.
+
 ## v1.3 — 2026-07-06 — Soil-CO₂ survivorship corrected
 - **IMPACT — `data/monitoring_sensor_survivorship.csv` and
   `figures/monitoring_sensor_survivorship.png` corrected.** The soil-CO₂ channel now counts the

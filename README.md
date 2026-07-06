@@ -1,17 +1,12 @@
-# XXL Lysimeter Experiment — Fürth 2022 (Carbon Drawdown Initiative)
+# XXL Lysimeter Experiment (1400 days) — Fürth 2022-2026 (Carbon Drawdown Initiative)
 
 **Open dataset for our long-running enhanced-weathering lysimeter experiment**, soil
-"Fürth 2022", 2022-05 … 2026 (~1,400 days). This is the data, code and figures behind
-our **XXL Lysimeter blog series** — the long-run, in-situ-instrumented companion to our
-two-year greenhouse study.
+"Fürth 2022", 2022-05 … 2026 (~1,400 days). This is the data, code and figures for our
+long-running, in-situ-instrumented XXL Lysimeter enhanced-weathering experiment — the
+field companion to our two-year greenhouse study.
 
 *Version 1.0 · 2026-07 · Experiment conducted by Carbon Drawdown Initiative,
-www.carbon-drawdown.de · Contact: Dirk Paessler, dirk@dirkpaessler.com*
-
-> **This dataset supersedes** the older *"XXL Lysimeter Experiment (started 2022) —
-> Environmental data 2022–2024"* folder in `dirkpaessler/carbdown`. It is more complete
-> (leachate chemistry, cumulative CO₂ export, buried-sensor time series, weather and
-> feedstock characterization) and reproducible end-to-end.
+www.carbon-drawdown.de · Contact: Dirk Paessler, info@carbon-drawdown.de*
 
 ---
 
@@ -36,6 +31,26 @@ lysimeter pots at our Fürth site.
 
 The headline quantity is the **cumulative CO₂-equivalent export** in t CO₂/ha, computed
 from measured bicarbonate export.
+
+### Instrumentation (hardware)
+
+All buried and ambient sensors report over **LoRaWAN**. Per-pot channels are logged
+sub-hourly and aggregated (weekly for the soil EC/pH/moisture series, daily for soil CO₂).
+
+| Measurement | Device | Manufacturer |
+| --- | --- | --- |
+| Soil moisture, bulk EC & temperature (30 & 60 cm) | [LSE01](https://www.dragino.com/products/lora-lorawan-end-node/item/159-lse01.html) (LoRaWAN Soil Moisture & EC) | Dragino |
+| Soil pH (30 & 60 cm) | [LSPH01](https://www.dragino.com/products/agriculture-weather-station/item/184-lsph01.html) (LoRaWAN Soil pH) | Dragino |
+| Soil CO₂ (~20 cm, one per pot) | [LoRaWAN CO₂ Sensor, EU868](https://www.seeedstudio.com/LoRaWAN-CO2-Sensor-EU868-p-4311.html) | Seeed Studio |
+| Ambient CO₂ + T/RH (20 cm and 200 cm) | [SenseCAP S2103](https://www.seeedstudio.com/SenseCAP-S2103-LoRaWAN-CO2-Temperature-and-Humidity-Sensor-p-5356.html) LoRaWAN CO₂/T/RH | Seeed Studio |
+| Tank head-space CO₂ (0–10 000 ppm; often railed at 10 000) | [EM500-CO2](https://www.milesight.com/iot/product/lorawan-sensor/em500-co2) | Milesight |
+| On-site rainfall — piezo (2024-07 →) | Ecowitt piezo rain gauge *(model to be confirmed)* | Ecowitt |
+| On-site rainfall — tipping-bucket (2022–2024, faulty) | *make/model to be confirmed* | — |
+| LoRaWAN gateway | *make/model to be confirmed* | — |
+| In-tank cameras (leachate level) | *make/model to be confirmed* | — |
+
+Leachate chemistry (TA, ions, pH, EC) is measured off-site by an accredited lab from the
+pumped samples; the official weather reference is DWD station **03668 Nürnberg-Flughafen**.
 
 ## 2. Scope of this release (please read)
 
@@ -79,8 +94,8 @@ xxl-lysimeter-experiment-2022/
 │   └── onsite_weather_extra.xlsx
 ├── weather/                      ← on-site vs official (DWD) rainfall & temperature
 ├── reference/                    ← feedstock characterization (XRD, XRF, grain size)
-├── figures/                      ← every figure in the blog series (branded PNGs)
-└── code/                         ← scripts that turn the tables into the series figures
+├── figures/                      ← analysis figures (branded PNGs)
+└── code/                         ← scripts that turn the tables into the figures
 ```
 
 ## 4. Data dictionary (key files)
@@ -154,17 +169,18 @@ Full units, molar masses and provenance are in **`data/xxl_lysimeter_metadata.js
   weathering.
 - **Below detection limit:** values reported as `<x` are set to 0 (flagged `below_lod` in
   the long table).
-- **Sensor dryness filter:** in the weekly monitoring series, buried EC/pH readings below
-  **10 % VWC** are dropped (a very dry probe loses reliable contact with pore water). This
-  does not affect the soil-EC ↔ leachate correlations — the soil is wet whenever leachate is
-  pumped (only 3 of 355 paired readings are below 10 %).
+- **No dryness filter on EC.** The LSE01 reads EC and moisture from the same prongs and
+  already temperature/conductivity-compensates its EC, so moisture is **not** an independent
+  variable to gate or correct on — we use the raw buried EC. It would not matter anyway: the
+  soil is wet whenever leachate is pumped (only 3 of 355 paired readings below 10 % VWC).
 - **Validation:** this pipeline reproduces our original project notebook to a median
   relative error near zero (see `metadata.json`).
 
 ## 6. Volume models (why three)
 
-The leachate volume that carries the alkalinity is only directly known for some
-samplings. We provide three estimates; our analyses default to **`avgBD`** (A-pots
+The leachate volume for the A-Series pots that carries the alkalinity is only directly known for
+some samplings (water had to be pumped out frequently to save the cameras in the tanks from
+drowning). We provide three estimates; our analyses default to **`avgBD`** (A-pots
 inferred from their parallel B/C/D siblings), which is the most plausible by an
 out-of-sample check — see `data/xxl_lysimeter_volume_strategy_plausibility.csv` and
 `figures/alt_FUERTH2022_volume_strategy_plausibility.png` (median |rel. dev| ≈ 6 % for
@@ -185,11 +201,11 @@ out-of-sample check — see `data/xxl_lysimeter_volume_strategy_plausibility.csv
   pot, so it does not change the dose comparison but lowers the absolute CDR (see §5).
   → `figures/water_irrigation_share_2022.png`, `figures/TA_cumulative_gross_vs_net_tapwater.png`.
 - **A buried EC sensor tracks leachate chemistry.** The 60 cm soil-EC probe correlates
-  with leachate EC/Ca/Mg at **r ≈ 0.71** pooled (0.60–0.77 per treatment), and with
-  leachate TA at r ≈ 0.46. **The 30 cm sensor barely works** (r ≈ 0.39). Soil-EC and soil
-  moisture are read from the same LSE01 prongs, so moisture is not an independent confounder;
-  the correlation is unchanged whether or not dry readings are excluded (3/355 paired points
-  below 10 % moisture). → `figures/story_1_soilEC_predicts_leachateEC.png`,
+  with leachate EC/Ca/Mg at **r ≈ 0.70** pooled (0.60–0.77 per treatment), and with
+  leachate TA at r ≈ 0.45. **The 30 cm sensor barely works** (r ≈ 0.39). Soil-EC and soil
+  moisture are read from the same LSE01 prongs, so moisture is not an independent confounder
+  and we apply no dryness filter (only 3/355 paired points fall below 10 % VWC).
+  → `figures/story_1_soilEC_predicts_leachateEC.png`,
   `monitoring_soilEC_vs_leachateEC_by_treatment_depth.png`.
 - **The soil breathes.** Temperature → soil CO₂, soil CO₂ → leachate pH, soil CO₂ → leachate
   TA; a seasonal weathering engine, consistent across doses. Site-level chain (+0.58 / −0.74 /
@@ -228,19 +244,10 @@ data in this repository (they require `python3`, `pandas`, `numpy`, `matplotlib`
 our logo via `code/brand_standalone.py`. The raw-lab → leachate-table ingestion step lives
 in our main experiment repository and is not needed to consume this dataset.
 
-## 10. Blog series & further reading
+## 10. Further reading & references
 
-**The XXL Lysimeter series** (this dataset backs all six parts):
-1. *1400 days in the XXL lysimeter: our long-run companion to the greenhouse experiment.*
-2. *Does more basalt mean more CO₂ removal? What 1400 days actually show.*
-3. *The soil breathes: how temperature and CO₂ drive the weathering signal.*
-4. *Can a buried EC sensor stand in for lab alkalinity? In-situ EC as a continuous MRV proxy.*
-5. *What the soil tells us when it breathes: reading four years of buried CO₂ sensors.*
-6. *Four years of buried sensors: rainfall, ambient data and sensor survivorship.*
+Companion greenhouse work and background:
 
-*(Article 1 published; parts 2–6 in preparation — links added on publication.)*
-
-**Companion greenhouse work and background:**
 - Greenhouse EW series — *MRV Proxies for EW: a guided tour* (Part 1 of 9):
   https://www.carbon-drawdown.de/blog/2026-1-23-19-mrv-proxies-for-ew-a-guided-tour-through-our-data-from-our-two-year-greenhouse-experiment
 - Report (PDF) — *Total Alkalinity and Electrical Conductivity as MRV Proxies for Enhanced
@@ -254,14 +261,15 @@ in our main experiment repository and is not needed to consume this dataset.
   https://www.carbon-drawdown.de/blog/2022-6-13-photo-logbook-building-the-xxl-lysimeter-weathering-experiment-part-1
 - Biomass assessment of weathering in the XXL lysimeters (2022-10):
   https://www.carbon-drawdown.de/blog/2022-10-9-biomass-assessment-of-weathering-in-the-xxl-lysimeters
-- Whitepaper — *Learnings from running the world's largest greenhouse EW experiment*
-  (Jan 2025), Tables 5–7 (feedstock characterization).
+- Whitepaper — *What We Learned from the World's Largest Greenhouse Experiment* (Jan 2025),
+  Tables 5–7 (feedstock characterization):
+  https://www.carbon-drawdown.de/blog/2025-1-29-what-we-learned-from-the-worlds-largest-greenhouse-experiment
 
 ## 11. License & citation
 
 Released under **CC-BY-4.0** (see `LICENSE`). Please cite as in `CITATION.cff`:
 
-> Carbon Drawdown Initiative (2026). *XXL Lysimeter Experiment — Fürth 2022 dataset.*
+> Carbon Drawdown Initiative (2026). *XXL Lysimeter Experiment — Fürth 2022-2026 dataset.*
 > Fürth, Germany. https://www.carbon-drawdown.de
 
 ---

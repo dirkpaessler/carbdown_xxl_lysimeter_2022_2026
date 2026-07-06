@@ -81,19 +81,28 @@ def main():
     co2 = load()
 
     # ================= FIGURE 1: seasonal breathing, doses overlaid =================
+    # Smooth, many-point curves: daily median (per dose / all pots), gap-filled on a daily
+    # grid, then a 30-day centered rolling mean — far less ragged than one point per month.
     fig, ax = plt.subplots(figsize=(11, 5.0))
-    env = co2.groupby("ym")["soil_co2_ppm"].agg(lo=lambda s: s.quantile(.25),
-                                                hi=lambda s: s.quantile(.75)).reset_index()
-    ax.fill_between(env["ym"], env["lo"], env["hi"], color="#cfcfcf", alpha=0.35, lw=0,
-                    zorder=1, label="all pots, 25–75 %")
+    full_idx = pd.date_range(co2["date"].min(), co2["date"].max(), freq="D")
+    def _smooth(s):
+        s = s.reindex(full_idx).interpolate(limit=14, limit_area="inside")
+        return s.rolling(30, center=True, min_periods=7).mean()
+    env_lo = _smooth(co2.groupby("date")["soil_co2_ppm"].quantile(.25))
+    env_hi = _smooth(co2.groupby("date")["soil_co2_ppm"].quantile(.75))
+    # start at 2022-10 (full 20-pot set installed) so the envelope matches the dose lines
+    # and the early 4-pot-only spike does not appear as a lone grey bump.
+    keep = full_idx >= np.datetime64("2022-10-01")
+    ax.fill_between(full_idx[keep], env_lo[keep], env_hi[keep], color="#cfcfcf",
+                    alpha=0.35, lw=0, zorder=1, label="all pots, 25–75 %")
     for t, c, l in TR:
         g = co2[co2.treatment == t]
-        mm = g.groupby("ym")["soil_co2_ppm"].median().reset_index()
-        mm = mm[mm["ym"] >= np.datetime64("2022-10")]
-        ax.plot(mm["ym"], mm["soil_co2_ppm"], "-", color=c, lw=2.0, zorder=3, label=l)
-    ax.set_ylabel("Soil CO₂ at ~20 cm (ppm), monthly median")
+        mm = _smooth(g.groupby("date")["soil_co2_ppm"].median())
+        mm = mm[mm.index >= np.datetime64("2022-10-01")]
+        ax.plot(mm.index, mm.values, "-", color=c, lw=2.0, zorder=3, label=l)
+    ax.set_ylabel("Soil CO₂ at ~20 cm (ppm), 30-day rolling median")
     ax.set_xlabel("")
-    ax.set_ylim(0, 7000)
+    ax.set_ylim(0, 9500)
     ax.xaxis.set_major_locator(mdates.MonthLocator((1, 7)))
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%b\n%Y"))
     ax.set_title("Every pot breathes with the seasons — and the basalt dose barely changes the breath\n"
