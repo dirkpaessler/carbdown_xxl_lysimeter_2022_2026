@@ -1,0 +1,25 @@
+{
+  "title": "XXL Lysimeter Experiment — Fürth 2022–2026 dataset",
+  "upload_type": "dataset",
+  "access_right": "open",
+  "license": "CC-BY-4.0",
+  "description": "Data, code and figures from the Carbon Drawdown Initiative XXL Lysimeter enhanced-weathering experiment on soil \"Fürth 2022\": twenty outdoor lysimeter pots (0.406 m² each), an unamended control plus basalt at 100/200/400 t/ha and a fine grind, sampled roughly monthly 2022–2026 for leachate total alkalinity (the CO₂-drawdown proxy), major ions, pH and electrical conductivity, with buried soil sensors (moisture, temperature, EC, pH and CO₂), on-site and official (DWD) weather, and feedstock characterization. The field, in-situ-instrumented companion to the Carbon Drawdown Initiative two-year greenhouse study. Includes reproducible Python code and all figures.",
+  "creators": [
+    {"name": "Paessler, Dirk", "affiliation": "Carbon Drawdown Initiative"},
+    {"name": "Carbon Drawdown Initiative (Carbdown GmbH)", "affiliation": "Fürth, Germany"}
+  ],
+  "keywords": [
+    "enhanced weathering",
+    "enhanced rock weathering",
+    "carbon dioxide removal",
+    "total alkalinity",
+    "MRV",
+    "lysimeter",
+    "soil sensors",
+    "basalt"
+  ],
+  "related_identifiers": [
+    {"relation": "references", "identifier": "10.5281/zenodo.18360183", "scheme": "doi"},
+    {"relation": "isSupplementTo", "identifier": "https://www.carbon-drawdown.de", "scheme": "url"}
+  ]
+}

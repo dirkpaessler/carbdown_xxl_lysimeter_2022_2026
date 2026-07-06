@@ -5,7 +5,7 @@
 long-running, in-situ-instrumented XXL Lysimeter enhanced-weathering experiment — the
 field companion to our two-year greenhouse study.
 
-*Version 1.0 · 2026-07 · Experiment conducted by Carbon Drawdown Initiative,
+*Version 1.4 · 2026-07 · Experiment conducted by Carbon Drawdown Initiative,
 www.carbon-drawdown.de · Contact: Dirk Paessler, info@carbon-drawdown.de*
 
 ---

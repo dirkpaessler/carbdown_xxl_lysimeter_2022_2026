@@ -1,7 +1,8 @@
 cff-version: 1.2.0
-title: "XXL Lysimeter Experiment — Fürth 2022 dataset"
+title: "XXL Lysimeter Experiment — Fürth 2022–2026 dataset"
 message: "If you use this dataset, please cite it as below."
 type: dataset
+repository-code: "https://github.com/dirkpaessler/carbdown_xxl_lysimeter_2022_2026"
 authors:
   - name: "Carbon Drawdown Initiative (Carbdown GmbH)"
     website: "https://www.carbon-drawdown.de"
@@ -26,7 +27,7 @@ keywords:
   - "MRV"
   - "lysimeter"
   - "soil sensors"
-version: "1.0"
-date-released: "2026-07-04"
+version: "1.4"
+date-released: "2026-07-06"
 license: CC-BY-4.0
-url: "https://www.carbon-drawdown.de"
+url: "https://github.com/dirkpaessler/carbdown_xxl_lysimeter_2022_2026"
