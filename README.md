@@ -1,5 +1,7 @@
 # XXL Lysimeter Experiment (1400 days) — Fürth 2022-2026 (Carbon Drawdown Initiative)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21216439.svg)](https://doi.org/10.5281/zenodo.21216439)
+
 **Open dataset for our long-running enhanced-weathering lysimeter experiment**, soil
 "Fürth 2022", 2022-05 … 2026 (~1,400 days). This is the data, code and figures for our
 long-running, in-situ-instrumented XXL Lysimeter enhanced-weathering experiment — the
@@ -271,8 +273,11 @@ Companion greenhouse work and background:
 
 Released under **CC-BY-4.0** (see `LICENSE`). Please cite as in `CITATION.cff`:
 
-> Carbon Drawdown Initiative (2026). *XXL Lysimeter Experiment — Fürth 2022-2026 dataset.*
-> Fürth, Germany. https://www.carbon-drawdown.de
+> Paessler, D. & Carbon Drawdown Initiative (2026). *XXL Lysimeter Experiment — Fürth
+> 2022–2026 dataset* (v1.4). Zenodo. https://doi.org/10.5281/zenodo.21216439
+
+The concept DOI **[10.5281/zenodo.21216439](https://doi.org/10.5281/zenodo.21216439)** always
+resolves to the latest version.
 
 ---
 

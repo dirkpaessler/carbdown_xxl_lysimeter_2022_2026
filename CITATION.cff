@@ -2,6 +2,7 @@ cff-version: 1.2.0
 title: "XXL Lysimeter Experiment — Fürth 2022–2026 dataset"
 message: "If you use this dataset, please cite it as below."
 type: dataset
+doi: "10.5281/zenodo.21216439"
 repository-code: "https://github.com/dirkpaessler/carbdown_xxl_lysimeter_2022_2026"
 authors:
   - name: "Carbon Drawdown Initiative (Carbdown GmbH)"
