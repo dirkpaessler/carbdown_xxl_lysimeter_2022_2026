@@ -44,10 +44,12 @@ sub-hourly and aggregated (weekly for the soil EC/pH/moisture series, daily for 
 | Soil CO₂ (~20 cm, one per pot) | [LoRaWAN CO₂ Sensor, EU868](https://www.seeedstudio.com/LoRaWAN-CO2-Sensor-EU868-p-4311.html) | Seeed Studio |
 | Ambient CO₂ + T/RH (20 cm and 200 cm) | [SenseCAP S2103](https://www.seeedstudio.com/SenseCAP-S2103-LoRaWAN-CO2-Temperature-and-Humidity-Sensor-p-5356.html) LoRaWAN CO₂/T/RH | Seeed Studio |
 | Tank head-space CO₂ (0–10 000 ppm; often railed at 10 000) | [EM500-CO2](https://www.milesight.com/iot/product/lorawan-sensor/em500-co2) | Milesight |
-| On-site rainfall — piezo (2024-07 →) | Ecowitt piezo rain gauge *(model to be confirmed)* | Ecowitt |
-| On-site rainfall — tipping-bucket (2022–2024, faulty) | *make/model to be confirmed* | — |
+| On-site rainfall — piezo (2024-07 →) | [Wittboy Pro HP2564](https://shop.ecowitt.com/de-de/products/wittboy-pro-hp2564) | Ecowitt |
+| On-site rainfall — tipping-bucket (2022–2024) | [MeteoRain 200 Compact](https://www.baranidesign.com/meteorain-iot) | Barani Design |
+| On-site air temperature / humidity / pressure / light | [MeteoHelix IoT Pro](https://www.baranidesign.com/meteohelix-pro-weather-station) | Barani Design |
+| On-site wind | [MeteoWind IoT Pro](https://www.baranidesign.com/meteowind-iot-pro) | Barani Design |
+| In-tank cameras (leachate level) | [UniFi Protect cameras](https://ui.com/camera-security) | Ubiquiti |
 | LoRaWAN gateway | *make/model to be confirmed* | — |
-| In-tank cameras (leachate level) | *make/model to be confirmed* | — |
 
 Leachate chemistry (TA, ions, pH, EC) is measured off-site by an accredited lab from the
 pumped samples; the official weather reference is DWD station **03668 Nürnberg-Flughafen**.
